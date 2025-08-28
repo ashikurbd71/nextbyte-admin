@@ -19,9 +19,9 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
 
     const navigationItems = [
         { icon: Home, label: "Dashboard", href: "/" },
-        { icon: Users, label: "Users", href: "/users" },
         { icon: BarChart3, label: "Analytics", href: "/analytics" },
-        { icon: FileText, label: "Reports", href: "/reports" },
+        { icon: Users, label: "Users", href: "/users" },
+
         { icon: Calendar, label: "Calendar", href: "/calendar" },
         { icon: Mail, label: "Messages", href: "/messages" },
         { icon: Settings, label: "Settings", href: "/settings" },

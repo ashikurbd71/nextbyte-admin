@@ -19,6 +19,7 @@ import DashboardHome from "./pages/dashboard/DashboardHome";
 import UsersPage from "./pages/dashboard/UsersPage";
 import AnalyticsPage from "./pages/dashboard/AnalyticsPage";
 import SettingsPage from "./pages/dashboard/SettingsPage";
+import ReportsViewPage from "./pages/dashboard/ReportsViewPage";
 
 export const routes = createBrowserRouter([
 
@@ -42,7 +43,7 @@ export const routes = createBrowserRouter([
       },
       {
         path: "/reports",
-        element: <div className="p-6"><h1 className="text-2xl font-bold">Reports</h1><p>Reports page coming soon...</p></div>,
+        element: <ReportsViewPage />,
       },
       {
         path: "/calendar",

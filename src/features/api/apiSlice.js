@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { userLoggedIn, userLoggedOut } from "@/features/auth/authSlice";
 import { getTokens } from "@/hooks/useToken";
 
+
 const BASE_URL = import.meta.env.VITE_API_URL;
 const MAX_RETRY_COUNT = 3;
 
@@ -37,7 +38,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
             credentials: "include",
           },
           api,
-          extraOptions
+          extraOptions,
         );
 
         if (refreshResult.data?.success) {
@@ -49,7 +50,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
               accessToken: refreshResult?.data?.data?.accessToken,
               refreshToken: refreshResult?.data?.data?.refreshToken,
               rememberMe,
-            })
+            }),
           );
 
           // Retry the original request with new token
@@ -87,8 +88,13 @@ const customMiddleware = (api) => (next) => (action) => {
 
 export const apiSlice = createApi({
   reducerPath: "apiSlice",
-  baseQuery: baseQueryWithReauth,
-  tagTypes: ["auth", "dashboard"],
+  baseQuery: baseQuery,
+  tagTypes: [
+    "auth",
+    "dashboard",
+    "earnings-report",
+    "dashboard-mark",
+  ],
   keepUnusedDataFor: 0, // Don't keep any unused data
   refetchOnMountOrArgChange: true, // Always refetch when component mounts
   refetchOnReconnect: true, // Refetch on reconnection
