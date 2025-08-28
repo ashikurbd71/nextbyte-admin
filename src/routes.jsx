@@ -17,10 +17,13 @@ import RegisterPage from "./pages/auth/register";
 // DASHBOARD PAGES
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import UsersPage from "./pages/dashboard/UsersPage";
+import CoursesPage from "./pages/dashboard/CoursesPage";
 import AnalyticsPage from "./pages/dashboard/AnalyticsPage";
 import SettingsPage from "./pages/dashboard/SettingsPage";
 import ReportsViewPage from "./pages/dashboard/ReportsViewPage";
 import NotificationsPage from "./pages/dashboard/NotificationsPage";
+import CategoriesPage from "./pages/dashboard/CategoriesPage";
+import InstructorsPage from "./pages/dashboard/InstructorsPage";
 
 export const routes = createBrowserRouter([
 
@@ -37,6 +40,14 @@ export const routes = createBrowserRouter([
       {
         path: "/users",
         element: <UsersPage />,
+      },
+      {
+        path: "/instructors",
+        element: <InstructorsPage />,
+      },
+      {
+        path: "/courses",
+        element: <CoursesPage />,
       },
       {
         path: "/analytics",
@@ -61,6 +72,10 @@ export const routes = createBrowserRouter([
       {
         path: "/notifications",
         element: <NotificationsPage />,
+      },
+      {
+        path: "/categories",
+        element: <CategoriesPage />,
       },
     ],
   },

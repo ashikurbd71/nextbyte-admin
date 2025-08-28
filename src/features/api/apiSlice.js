@@ -96,6 +96,11 @@ export const apiSlice = createApi({
     "dashboard-mark",
     "users",
     "notifications",
+    "courses",
+    "course-statistics",
+    "course",
+    "categories",
+    "category",
   ],
   keepUnusedDataFor: 0, // Don't keep any unused data
   refetchOnMountOrArgChange: true, // Always refetch when component mounts

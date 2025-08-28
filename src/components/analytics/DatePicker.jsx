@@ -98,7 +98,7 @@ const DatePicker = ({
 
             {/* Date Picker Popover */}
             {showDatePicker && (
-                <div className="absolute top-full left-0 mt-2 z-50 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 p-4 min-w-[320px]">
+                <div className="absolute top-full left-0 mt-2 z-50 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 p-4 min-w-[320px] mr-24">
                     <div className="flex items-center justify-between mb-4">
                         <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{title}</h3>
                         <Button

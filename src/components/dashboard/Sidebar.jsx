@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
     Home,
     Users,
+    BookOpen,
     Settings,
     BarChart3,
     FileText,
@@ -12,7 +13,9 @@ import {
     User,
     LogOut,
     X,
-    Bell
+    Bell,
+    ListChecks,
+    UserRoundCog
 } from "lucide-react";
 
 const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
@@ -22,10 +25,14 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
         { icon: Home, label: "Dashboard", href: "/" },
         { icon: BarChart3, label: "Analytics", href: "/analytics" },
         { icon: Users, label: "Users", href: "/users" },
+        { icon: UserRoundCog, label: "Instructors", href: "/instructors" },
+        { icon: ListChecks, label: "Categories", href: "/categories" },
+        { icon: BookOpen, label: "Courses", href: "/courses" },
         { icon: Bell, label: "Notifications", href: "/notifications" },
-        { icon: Calendar, label: "Calendar", href: "/calendar" },
+
         { icon: Mail, label: "Messages", href: "/messages" },
         { icon: Settings, label: "Settings", href: "/settings" },
+
     ];
 
     const isActive = (href) => {
@@ -48,11 +55,11 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
             {/* Sidebar */}
             <div className={`
         fixed top-0 left-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 
-        transform transition-transform duration-300 ease-in-out z-50
+        transform transition-transform duration-300 ease-in-out z-50 flex flex-col
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
                 {/* Sidebar Header */}
-                <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
+                <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
                     <div className="flex items-center space-x-2">
                         <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                             <span className="text-white font-bold text-sm">N</span>
@@ -69,8 +76,8 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
                     </Button>
                 </div>
 
-                {/* Navigation */}
-                <nav className="p-4 space-y-2">
+                {/* Navigation - Scrollable */}
+                <nav className="flex-1 overflow-y-auto p-4 space-y-2">
                     {navigationItems.map((item) => (
                         <Link
                             key={item.label}
@@ -90,7 +97,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
                 </nav>
 
                 {/* User Profile Section */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-200 dark:border-slate-700">
+                <div className="p-4 border-t border-slate-200 dark:border-slate-700 flex-shrink-0">
                     <div className="flex items-center space-x-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-800">
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                             <User className="h-5 w-5 text-white" />

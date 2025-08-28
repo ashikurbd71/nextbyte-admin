@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
     --primary: 0, 100%, 37%;
@@ -30,6 +31,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --primary: 0, 100%, 37%;
     --secondary: 251, 100%, 96%;
@@ -58,10 +60,12 @@
     --chart-5: 340 75% 55%;
   }
 }
+
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     /* @apply bg-background text-foreground; */
     overflow-x: hidden;

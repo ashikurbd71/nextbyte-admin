@@ -28,6 +28,8 @@ const DataTable = ({
     emptyMessage = "No data found",
     className = ""
 }) => {
+
+
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
@@ -38,7 +40,14 @@ const DataTable = ({
 
         return data.filter(item => {
             return searchKeys.some(key => {
-                const value = item[key];
+                // Handle nested properties (e.g., 'category.name')
+                const keys = key.split('.');
+                let value = item;
+                for (const k of keys) {
+                    value = value?.[k];
+                    if (value === null || value === undefined) break;
+                }
+
                 if (value === null || value === undefined) return false;
                 return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
             });

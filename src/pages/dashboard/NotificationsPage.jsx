@@ -190,7 +190,7 @@ const NotificationsPage = () => {
                                 {showReadOnly ? <Eye className="mr-2 h-4 w-4" /> : <EyeOff className="mr-2 h-4 w-4" />}
                                 {showReadOnly ? "Show All" : "Show Read Only"}
                             </Button>
-                            <Badge variant="secondary">
+                            <Badge >
                                 {totalItems} notifications
                             </Badge>
                         </div>
