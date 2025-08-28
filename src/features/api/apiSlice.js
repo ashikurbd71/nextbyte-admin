@@ -3,7 +3,7 @@ import { userLoggedIn, userLoggedOut } from "@/features/auth/authSlice";
 import { getTokens } from "@/hooks/useToken";
 
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_URL || "/api/v1";
 const MAX_RETRY_COUNT = 3;
 
 const baseQuery = fetchBaseQuery({
@@ -94,6 +94,7 @@ export const apiSlice = createApi({
     "dashboard",
     "earnings-report",
     "dashboard-mark",
+    "users",
   ],
   keepUnusedDataFor: 0, // Don't keep any unused data
   refetchOnMountOrArgChange: true, // Always refetch when component mounts
