@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Ban, Plus, Download, Settings } from "lucide-react";
+import { Ban, Plus, Download, Settings, Mail } from "lucide-react";
 import { exportToExcel, formatUserDataForExport } from "@/utils/exportUtils";
 import { toast } from "react-hot-toast";
 import UserExportModal from "./UserExportModal";
+import CreateNotificationModal from "./CreateNotificationModal";
 
 const UserActionsBar = ({
     showBannedUsers,
@@ -13,6 +14,7 @@ const UserActionsBar = ({
     users = []
 }) => {
     const [showExportModal, setShowExportModal] = useState(false);
+    const [showNotificationModal, setShowNotificationModal] = useState(false);
 
     const handleQuickExport = () => {
         if (!users || users.length === 0) {
@@ -55,6 +57,15 @@ const UserActionsBar = ({
                             <Button
                                 variant="outline"
                                 size="sm"
+                                onClick={() => setShowNotificationModal(true)}
+
+                            >
+                                <Mail className="mr-2 h-4 w-4" />
+                                Send Mail
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
                                 onClick={handleQuickExport}
                                 disabled={!users || users.length === 0}
                             >
@@ -84,6 +95,16 @@ const UserActionsBar = ({
                 isOpen={showExportModal}
                 onClose={() => setShowExportModal(false)}
                 users={users}
+            />
+
+            {/* Notification Modal */}
+            <CreateNotificationModal
+                isOpen={showNotificationModal}
+                onClose={() => setShowNotificationModal(false)}
+                onSuccess={() => {
+                    setShowNotificationModal(false);
+                    toast.success("Notification sent successfully!");
+                }}
             />
         </>
     );

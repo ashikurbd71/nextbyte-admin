@@ -5,11 +5,11 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// import NotificationCard from "@/pages/settings/notification/notification-card";
+import NotificationCard from "@/components/notification/NotificationCard";
 
 import { Switch } from "@/components/ui/switch";
 import { Bell, CheckCheck, FolderOpen } from "lucide-react";
-import { useUpdateNotificationMutation } from "@/features/notification/notificationApiSlice";
+import { useUpdateNotificationMutation } from "@/features/notification/notificationApis";
 import toast from "react-hot-toast";
 
 const NotificationDropdown = ({ children, data, unReadCount }) => {
@@ -51,11 +51,10 @@ const NotificationDropdown = ({ children, data, unReadCount }) => {
             </div>
             <span
               onClick={unReadCount > 0 && handleMarkAllAsRead}
-              className={`${
-                unReadCount > 0
-                  ? "tr cursor-pointer hover:text-black hover:dark:text-white"
-                  : "cursor-default"
-              } text-sm text-black/50  dark:text-white/50 fl gap-2 `}
+              className={`${unReadCount > 0
+                ? "tr cursor-pointer hover:text-black hover:dark:text-white"
+                : "cursor-default"
+                } text-sm text-black/50  dark:text-white/50 fl gap-2 `}
             >
               <CheckCheck className="h-4 w-4" /> Mark all as read
             </span>
@@ -81,8 +80,9 @@ const NotificationDropdown = ({ children, data, unReadCount }) => {
             data?.map((notification, index) => (
               <NotificationCard
                 key={index}
-                isDropdowon
+                isDropdown
                 notification={notification}
+                showDeleteButton={false}
                 onClick={() =>
                   !notification?.isRead && handleMarkRead(notification?._id)
                 }

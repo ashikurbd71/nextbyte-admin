@@ -20,6 +20,7 @@ import UsersPage from "./pages/dashboard/UsersPage";
 import AnalyticsPage from "./pages/dashboard/AnalyticsPage";
 import SettingsPage from "./pages/dashboard/SettingsPage";
 import ReportsViewPage from "./pages/dashboard/ReportsViewPage";
+import NotificationsPage from "./pages/dashboard/NotificationsPage";
 
 export const routes = createBrowserRouter([
 
@@ -56,6 +57,10 @@ export const routes = createBrowserRouter([
       {
         path: "/settings",
         element: <SettingsPage />,
+      },
+      {
+        path: "/notifications",
+        element: <NotificationsPage />,
       },
     ],
   },

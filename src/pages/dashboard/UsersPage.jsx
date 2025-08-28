@@ -92,8 +92,7 @@ const UsersPage = () => {
                 onRowClick={(user) => setSelectedUserId(user.id)}
             />
 
-            {/* Quick Actions */}
-            <UserQuickActions />
+
 
             {/* User Registration Form Modal */}
             {showRegistrationForm && (

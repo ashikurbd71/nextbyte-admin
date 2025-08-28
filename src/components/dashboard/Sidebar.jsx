@@ -11,7 +11,8 @@ import {
     Mail,
     User,
     LogOut,
-    X
+    X,
+    Bell
 } from "lucide-react";
 
 const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
@@ -21,7 +22,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
         { icon: Home, label: "Dashboard", href: "/" },
         { icon: BarChart3, label: "Analytics", href: "/analytics" },
         { icon: Users, label: "Users", href: "/users" },
-
+        { icon: Bell, label: "Notifications", href: "/notifications" },
         { icon: Calendar, label: "Calendar", href: "/calendar" },
         { icon: Mail, label: "Messages", href: "/messages" },
         { icon: Settings, label: "Settings", href: "/settings" },
