@@ -68,7 +68,7 @@ export const instructorApiSlice = apiSlice.injectEndpoints({
         activateInstructor: builder.mutation({
             query: (id) => ({
                 url: `/admin/activate/${id}`,
-                method: "POST",
+                method: "PATCH",
             }),
             invalidatesTags: ["instructors"],
         }),
@@ -77,7 +77,7 @@ export const instructorApiSlice = apiSlice.injectEndpoints({
         deactivateInstructor: builder.mutation({
             query: (id) => ({
                 url: `/admin/deactivate/${id}`,
-                method: "POST",
+                method: "PATCH",
             }),
             invalidatesTags: ["instructors"],
         }),

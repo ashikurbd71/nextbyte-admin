@@ -266,7 +266,7 @@ const InstructorDetailsModal = ({ instructor, onClose }) => {
                                     <span className="text-sm font-medium">Expertise:</span>
                                     <div className="flex flex-wrap gap-1">
                                         {instructor.expertise.map((skill, index) => (
-                                            <Badge key={index} variant="secondary" className="text-xs">
+                                            <Badge key={index} variant="" className="text-xs">
                                                 {skill}
                                             </Badge>
                                         ))}
