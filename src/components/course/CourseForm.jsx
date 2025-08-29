@@ -4,9 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuCheckboxItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { X, Upload, BookOpen, Plus, Trash2, Video, Tag, Image as ImageIcon } from "lucide-react";
+import { X, Upload, BookOpen, Plus, Trash2, Video, Tag, Image as ImageIcon, ChevronDown, Check } from "lucide-react";
 import { useFileUpload } from "@/hooks/useFileUpload";
 import { useGetCategoriesQuery } from "@/features/category/categoryApis";
 import { useGetAllInstructorsQuery } from "@/features/instractor-apis/instractorApis";
@@ -39,7 +40,7 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
         promoVideoUrl: "",
         thumbnail: "",
         categoryId: "",
-        instructorId: "",
+        instructorIds: [],
         level: "beginner",
         isPublished: false,
         isPublic: false,
@@ -47,6 +48,35 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
 
     useEffect(() => {
         if (course) {
+            // Handle instructor IDs - convert to array if it's a string or single ID
+            let instructorIdsArray = [];
+            if (course.instructorIds) {
+                if (Array.isArray(course.instructorIds)) {
+                    instructorIdsArray = course.instructorIds;
+                } else if (typeof course.instructorIds === 'string') {
+                    instructorIdsArray = course.instructorIds.split(',').map(id => id.trim()).filter(id => id !== '');
+                } else {
+                    instructorIdsArray = [course.instructorIds.toString()];
+                }
+            } else if (course.instructorId) {
+                instructorIdsArray = [course.instructorId.toString()];
+            } else if (course.instructor?.id) {
+                instructorIdsArray = [course.instructor.id.toString()];
+            } else if (course.instructors && Array.isArray(course.instructors)) {
+                // Handle the new API structure where instructors is an array
+                instructorIdsArray = course.instructors.map(instructor => instructor.id.toString());
+                console.log('Found instructors in course.instructors:', course.instructors);
+                console.log('Extracted instructor IDs:', instructorIdsArray);
+            }
+
+            console.log('Course data for form:', course);
+            console.log('Instructor IDs array:', instructorIdsArray);
+
+            // If no instructors are found, initialize with empty array
+            if (instructorIdsArray.length === 0) {
+                console.log('No instructors found, initializing with empty array');
+            }
+
             setFormData({
                 name: course.name || course.title || "",
                 slugName: course.slugName || "",
@@ -61,7 +91,7 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
                 promoVideoUrl: course.promoVideoUrl || "",
                 thumbnail: course.thumbnail || "",
                 categoryId: course.categoryId || course.category?.id || "",
-                instructorId: course.instructorId || course.instructor?.id || "",
+                instructorIds: instructorIdsArray,
                 level: course.level || "beginner",
                 isPublished: course.isPublished || false,
                 isPublic: course.isPublic || false,
@@ -137,6 +167,15 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        console.log('Form submission - instructor IDs:', formData.instructorIds);
+        console.log('Form submission - instructor validation:', instructorValidation);
+
+        // Validate instructor IDs before submission
+        if (!instructorValidation.isValid) {
+            alert("Please fix the instructor ID validation errors before submitting.");
+            return;
+        }
+
         // Clean up empty array items
         const cleanData = {
             ...formData,
@@ -147,9 +186,10 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
             discountPrice: formData.discountPrice ? parseFloat(formData.discountPrice) : 0,
             totalSeat: formData.totalSeat ? parseInt(formData.totalSeat) : 0,
             categoryId: formData.categoryId ? parseInt(formData.categoryId) : null,
-            instructorId: formData.instructorId ? parseInt(formData.instructorId) : null,
+            instructorIds: formData.instructorIds || [],
         };
 
+        console.log('Clean data for submission:', cleanData);
         onSubmit(cleanData);
     };
 
@@ -163,13 +203,6 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
             .trim('-');
     };
 
-    const handleNameChange = (value) => {
-        handleInputChange("name", value);
-        if (!formData.slugName || formData.slugName === generateSlug(formData.name)) {
-            handleInputChange("slugName", generateSlug(value));
-        }
-    };
-
     // Get categories from API
     const { data: categoriesData, isLoading: categoriesLoading } = useGetCategoriesQuery();
     const categories = categoriesData?.data || [];
@@ -177,6 +210,77 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
     // Get instructors from API
     const { data: instructorsData, isLoading: instructorsLoading } = useGetAllInstructorsQuery();
     const instructors = instructorsData?.data || [];
+
+    console.log('Instructors data:', instructorsData);
+    console.log('Instructors array:', instructors);
+
+    // Validate instructor IDs
+    const validateInstructorIds = (instructorIds) => {
+        console.log('Validating instructor IDs:', instructorIds);
+        console.log('Available instructor IDs:', instructors.map(instructor => instructor.id.toString()));
+
+        if (!instructorIds || instructorIds.length === 0) return { isValid: true, message: "" };
+
+        const availableIds = instructors.map(instructor => instructor.id.toString());
+        const invalidIds = instructorIds.filter(id => !availableIds.includes(id.toString()));
+
+        if (invalidIds.length > 0) {
+            console.log('Invalid instructor IDs found:', invalidIds);
+            return {
+                isValid: false,
+                message: `Invalid instructor IDs: ${invalidIds.join(', ')}`
+            };
+        }
+
+        console.log('All instructor IDs are valid');
+        return { isValid: true, message: "" };
+    };
+
+    const instructorValidation = instructors.length > 0 ? validateInstructorIds(formData.instructorIds) : { isValid: true, message: "" };
+
+    console.log('Instructor validation result:', instructorValidation);
+
+    // Get selected instructor names
+    const getSelectedInstructorNames = () => {
+        console.log('Getting selected instructor names for IDs:', formData.instructorIds);
+        console.log('Available instructors:', instructors);
+
+        if (!formData.instructorIds || formData.instructorIds.length === 0) return [];
+
+        return formData.instructorIds.map(id => {
+            const instructor = instructors.find(inst => inst.id.toString() === id.toString());
+            console.log(`Looking for instructor ID ${id}, found:`, instructor);
+            return instructor ? instructor.name : `Unknown (ID: ${id})`;
+        });
+    };
+
+    const selectedInstructorNames = getSelectedInstructorNames();
+
+    const handleNameChange = (value) => {
+        handleInputChange("name", value);
+        if (!formData.slugName || formData.slugName === generateSlug(formData.name)) {
+            handleInputChange("slugName", generateSlug(value));
+        }
+    };
+
+    // Handle instructor selection
+    const handleInstructorToggle = (instructorId) => {
+        const idString = instructorId.toString();
+        console.log('Toggling instructor ID:', idString);
+        console.log('Current instructor IDs:', formData.instructorIds);
+
+        setFormData(prev => {
+            const newInstructorIds = prev.instructorIds.includes(idString)
+                ? prev.instructorIds.filter(id => id !== idString)
+                : [...prev.instructorIds, idString];
+
+            console.log('New instructor IDs:', newInstructorIds);
+            return {
+                ...prev,
+                instructorIds: newInstructorIds
+            };
+        });
+    };
 
     const levels = [
         { value: "beginner", label: "Beginner" },
@@ -312,23 +416,66 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
                                     </Select>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="instructorId">Instructor *</Label>
-                                    <Select
-                                        value={formData.instructorId.toString()}
-                                        onValueChange={(value) => handleInputChange("instructorId", value)}
-                                        disabled={instructorsLoading}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder={instructorsLoading ? "Loading instructors..." : "Select instructor"} />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {instructors.map((instructor) => (
-                                                <SelectItem key={instructor.id} value={instructor.id.toString()}>
-                                                    {instructor.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                    <Label htmlFor="instructorIds">Instructors *</Label>
+                                    <div className="space-y-2">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button
+                                                    variant="outline"
+                                                    className="w-full justify-between"
+                                                    disabled={instructorsLoading}
+                                                >
+                                                    {selectedInstructorNames.length > 0
+                                                        ? `${selectedInstructorNames.length} instructor(s) selected: ${selectedInstructorNames.join(', ')}`
+                                                        : formData.instructorIds.length > 0
+                                                            ? `${formData.instructorIds.length} instructor(s) selected (IDs: ${formData.instructorIds.join(', ')})`
+                                                            : instructorsLoading
+                                                                ? "Loading instructors..."
+                                                                : "Select instructors"
+                                                    }
+                                                    <ChevronDown className="h-4 w-4 opacity-50" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent className="w-full min-w-[200px] max-h-[300px] overflow-y-auto">
+                                                <DropdownMenuLabel>Select Instructors</DropdownMenuLabel>
+                                                <DropdownMenuSeparator />
+                                                {instructors.length === 0 ? (
+                                                    <DropdownMenuCheckboxItem disabled>
+                                                        No instructors available
+                                                    </DropdownMenuCheckboxItem>
+                                                ) : (
+                                                    instructors.map((instructor) => {
+                                                        const isChecked = formData.instructorIds.includes(instructor.id.toString());
+                                                        console.log(`Instructor ${instructor.name} (ID: ${instructor.id}) checked:`, isChecked);
+                                                        return (
+                                                            <DropdownMenuCheckboxItem
+                                                                key={instructor.id}
+                                                                checked={isChecked}
+                                                                onCheckedChange={() => handleInstructorToggle(instructor.id)}
+                                                            >
+                                                                {instructor.name}
+                                                            </DropdownMenuCheckboxItem>
+                                                        );
+                                                    })
+                                                )}
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                        {selectedInstructorNames.length > 0 && (
+                                            <div className="text-xs text-blue-600">
+                                                Selected: {selectedInstructorNames.join(', ')}
+                                            </div>
+                                        )}
+                                        {formData.instructorIds.length > 0 && selectedInstructorNames.length === 0 && (
+                                            <div className="text-xs text-orange-600">
+                                                Warning: Instructor IDs found but names not resolved: {formData.instructorIds.join(', ')}
+                                            </div>
+                                        )}
+                                        {!instructorValidation.isValid && (
+                                            <div className="text-xs text-red-500">
+                                                {instructorValidation.message}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="level">Level</Label>

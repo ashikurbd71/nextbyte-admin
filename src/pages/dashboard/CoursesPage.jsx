@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     useGetCoursesQuery,
     useGetCourseStatisticsQuery,
@@ -15,6 +16,7 @@ import { createCourseTableColumns } from "@/components/course/CourseTableColumns
 import { useCourseActions } from "@/hooks/useCourseActions";
 
 const CoursesPage = () => {
+    const navigate = useNavigate();
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [selectedCourseId, setSelectedCourseId] = useState(null);
     const [editingCourse, setEditingCourse] = useState(null);
@@ -101,7 +103,10 @@ const CoursesPage = () => {
         onToggleActiveStatus: handleToggleActiveStatus,
         onTogglePublicStatus: handleTogglePublicStatus,
         onViewEnrollments: (courseId) => {
-            setEnrollmentCourseId(courseId);
+            navigate(`/course/${courseId}/enrollments`);
+        },
+        onViewReviews: (courseId) => {
+            navigate(`/course/${courseId}/reviews`);
         },
         loadingStates
     });

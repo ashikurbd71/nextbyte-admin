@@ -119,6 +119,44 @@ export const courseApiSlice = apiSlice.injectEndpoints({
                 "course-statistics",
             ],
         }),
+
+        // Send email to course enrollments
+        sendEmailToEnrollments: builder.mutation({
+            query: ({ courseId, emailData }) => ({
+                url: `/notifications/send-to-course-students/${courseId}`,
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: emailData,
+            }),
+            providesTags: (result, error, { courseId }) => [
+                { type: "course-enrollments", id: courseId },
+            ],
+        }),
+
+        // Get course enrollments with detailed information
+        getCourseEnrollmentsDetailed: builder.query({
+            query: (courseId) => `/course/${courseId}/enrollments/detailed`,
+            providesTags: (result, error, courseId) => [
+                { type: "course-enrollments", id: courseId },
+            ],
+        }),
+
+        // Send individual email to student
+        sendEmailToStudent: builder.mutation({
+            query: ({ studentId, courseId, emailData }) => ({
+                url: `/notifications/send-to-course-student/${courseId}/${studentId}`,
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: emailData,
+            }),
+            providesTags: (result, error, { studentId }) => [
+                { type: "userEnrollments", id: studentId },
+            ],
+        }),
     }),
 });
 
@@ -135,5 +173,8 @@ export const {
     useToggleCourseStatusMutation,
     useToggleCourseActiveStatusMutation,
     useToggleCoursePublicStatusMutation,
+    useSendEmailToEnrollmentsMutation,
+    useGetCourseEnrollmentsDetailedQuery,
+    useSendEmailToStudentMutation,
 } = courseApiSlice;
 

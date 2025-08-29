@@ -24,6 +24,8 @@ import ReportsViewPage from "./pages/dashboard/ReportsViewPage";
 import NotificationsPage from "./pages/dashboard/NotificationsPage";
 import CategoriesPage from "./pages/dashboard/CategoriesPage";
 import InstructorsPage from "./pages/dashboard/InstructorsPage";
+import CourseEnrollmentViewPage from "./pages/dashboard/CourseEnrollmentViewPage";
+import CourseReviewViewPage from "./pages/dashboard/CourseReviewViewPage";
 
 export const routes = createBrowserRouter([
 
@@ -76,6 +78,14 @@ export const routes = createBrowserRouter([
       {
         path: "/categories",
         element: <CategoriesPage />,
+      },
+      {
+        path: "/course/:courseId/enrollments",
+        element: <CourseEnrollmentViewPage />,
+      },
+      {
+        path: "/course/:courseId/reviews",
+        element: <CourseReviewViewPage />,
       },
     ],
   },

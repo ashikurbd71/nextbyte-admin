@@ -21,6 +21,7 @@ export const createCourseTableColumns = ({
     onToggleActiveStatus,
     onTogglePublicStatus,
     onViewEnrollments,
+    onViewReviews,
     loadingStates = {},
 }) => [
         {
@@ -49,9 +50,34 @@ export const createCourseTableColumns = ({
         },
         {
             key: "instructor",
-            header: "Instructor",
+            header: "Instructors",
             cell: (course) => {
                 if (!course) return null;
+
+                // Check if course has multiple instructors in array
+                if (course.instructors && Array.isArray(course.instructors) && course.instructors.length > 0) {
+                    return (
+                        <div className="flex items-center space-x-2">
+                            <div className="w-8 h-8 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center">
+                                <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                                    {course.instructors[0]?.name?.charAt(0)?.toUpperCase() || "I"}
+                                </span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-sm text-slate-900 dark:text-white">
+                                    {course.instructors[0]?.name || "Unknown"}
+                                </span>
+                                {course.instructors.length > 1 && (
+                                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                                        +{course.instructors.length - 1} more
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    );
+                }
+
+                // Fallback to single instructor (backward compatibility)
                 return (
                     <div className="flex items-center space-x-2">
                         <div className="w-8 h-8 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center">
@@ -101,9 +127,15 @@ export const createCourseTableColumns = ({
                 return (
                     <div className="flex items-center space-x-1">
                         <Users className="h-4 w-4 text-slate-400" />
-                        <span className="text-sm text-slate-900 dark:text-white">
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onViewEnrollments(course.id);
+                            }}
+                            className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium hover:underline cursor-pointer"
+                        >
                             {course.totalJoin || 0}
-                        </span>
+                        </button>
                         <span className="text-xs text-slate-400">
                             / {course.totalSeat || 0}
                         </span>
@@ -216,6 +248,13 @@ export const createCourseTableColumns = ({
                             >
                                 <Users className="mr-2 h-4 w-4" />
                                 View Enrollments ({course.totalJoin || 0})
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => onViewReviews(course.id)}
+                                className="cursor-pointer"
+                            >
+                                <Star className="mr-2 h-4 w-4" />
+                                View Reviews ({course.reviews?.length || 0})
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
