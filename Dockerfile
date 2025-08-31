@@ -1,63 +1,52 @@
 # syntax=docker/dockerfile:1.4
 
 # ---- Builder Stage ----
-# Installs all dependencies and builds the TypeScript source code.
+# Installs all dependencies and builds the static assets.
 FROM node:24-alpine AS builder
 WORKDIR /app
 
-# Enable pnpm package manager
+# Use corepack to enable pnpm
 RUN corepack enable pnpm
 
-# Copy dependency manifests and install all dependencies
+# Copy only the dependency manifests to leverage Docker cache
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the application source code
 COPY . .
 
-# Build the NestJS application
+# Build the static assets for production
+# This will create a 'dist' folder.
 RUN pnpm run build
 
-
 # ---- Runtime Stage ----
-# This is the final, lean, and secure image for production.
+# Sets up a lightweight server to serve the static files.
 FROM node:24-alpine AS runtime
-
-
-# Set the environment to production
-ENV NODE_ENV=production
 WORKDIR /app
 
-# Enable pnpm package manager
-RUN corepack enable pnpm
+ENV NODE_ENV=production
 
-# Create a dedicated, unprivileged user and group for the application
-RUN addgroup --system --gid 1001 appgroup && \
-    adduser --system --uid 1001 appuser --ingroup appgroup
+# Install 'serve', a lightweight static file server
+RUN corepack enable pnpm && pnpm add -g serve
 
-# CORRECTED LINE
-RUN mkdir -p /app/uploads && chown -R appuser:appgroup /app
+# Create a non-root user for security
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 appuser
 
+# Copy the built static assets from the builder stage
+# Vite outputs to a 'dist' folder by default.
+COPY --from=builder --chown=appuser:nodejs /app/dist ./dist
 
 # Switch to the non-root user
 USER appuser
 
-# Copy dependency manifests
-COPY --chown=appuser:appgroup package.json pnpm-lock.yaml ./
+# Expose the port the server will run on.
+# We use 5173 to match your Traefik configuration.
+EXPOSE 5173
 
-# Install only production dependencies
-RUN pnpm install --frozen-lockfile --prod
+ENV PORT=5173
 
-# Copy the compiled application code from the builder stage
-COPY --from=builder --chown=appuser:appgroup /app/dist ./dist
-
-# Expose the port the application will run on (NestJS default is 3000)
-EXPOSE 8000
-
-# Health check to ensure the application is running correctly
-# Note: Update '/api/health' to your actual health check endpoint.
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD node -e "require('http').get('http://127.0.0.1:8000/api/ini_health', {timeout: 2000}, (res) => res.statusCode === 200 ? process.exit(0) : process.exit(1)).on('error', () => process.exit(1))"
-
-# The command to start the application
-CMD node dist/main.js
+# Start the 'serve' command to serve the 'dist' folder.
+# The "-s" flag is crucial for Single Page Applications (SPAs) like React,
+# as it rewrites all not-found requests to index.html.
+CMD ["serve", "-s", "dist", "-l", "tcp://0.0.0.0:5173"]
