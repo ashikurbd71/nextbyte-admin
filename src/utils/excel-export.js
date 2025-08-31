@@ -5,7 +5,6 @@ export const exportToExcel = (data, filename = 'report.xlsx', sheetName = 'Repor
     try {
         // Validate input data
         if (!data || !Array.isArray(data) || data.length === 0) {
-            console.error('Invalid data for Excel export:', data);
             return false;
         }
 
@@ -26,7 +25,6 @@ export const exportToExcel = (data, filename = 'report.xlsx', sheetName = 'Repor
 
         // Check if URL.createObjectURL is supported
         if (!window.URL || !window.URL.createObjectURL) {
-            console.error('URL.createObjectURL is not supported in this browser');
             return false;
         }
 
@@ -46,7 +44,6 @@ export const exportToExcel = (data, filename = 'report.xlsx', sheetName = 'Repor
 
         return true;
     } catch (error) {
-        console.error('Error exporting to Excel:', error);
         return false;
     }
 };
@@ -64,7 +61,7 @@ export const formatDashboardDataForExport = (dashboardData) => {
     exportData.push({ 'Metric': 'Active Enrollments', 'Value': dashboardData.enrollments?.active || 0 });
     exportData.push({ 'Metric': 'Completed Enrollments', 'Value': dashboardData.enrollments?.completed || 0 });
     exportData.push({ 'Metric': 'Pending Enrollments', 'Value': dashboardData.enrollments?.pending || 0 });
-    exportData.push({ 'Metric': 'Cancelled Enrollments', 'Value': dashboardData.enrollments?.cancelled || 0 });
+    exportData.push({ 'Metric': 'Total Enrollments', 'Value': dashboardData.enrollments?.cancelled || 0 });
 
     return exportData;
 };

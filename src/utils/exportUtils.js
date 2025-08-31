@@ -31,7 +31,6 @@ export const exportToExcel = (data, filename = 'export.xlsx', sheetName = 'Sheet
 
         return true;
     } catch (error) {
-        console.error('Export error:', error);
         return false;
     }
 };
