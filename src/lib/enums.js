@@ -102,3 +102,94 @@ export const getPaymentMethodOptions = () => [
     { value: PaymentMethod.CHECK, label: getPaymentMethodDisplay(PaymentMethod.CHECK) },
     { value: PaymentMethod.OTHER, label: getPaymentMethodDisplay(PaymentMethod.OTHER) }
 ];
+
+// Admin Role Enums
+export const AdminRole = {
+    MODERATOR: 'moderator',
+    ADMIN: 'admin',
+    SUPER_ADMIN: 'super_admin'
+};
+
+// Route Permissions Configuration
+export const RoutePermissions = {
+    // Super Admin - Access to all routes
+    [AdminRole.SUPER_ADMIN]: [
+        'dashboard',
+        'analytics',
+        'instructor',
+        'enrollment',
+        'support-tickets',
+        'user',
+        'categories',
+        'courses',
+        'modules',
+        'lessons',
+        'reviews',
+        'notifications',
+        'assignments',
+        'assignment-submissions'
+    ],
+    
+    // Admin - Access to most routes except restricted ones
+    [AdminRole.ADMIN]: [
+        'user',
+        'categories',
+        'courses',
+        'modules',
+        'lessons',
+        'reviews',
+        'notifications',
+        'assignments',
+        'assignment-submissions'
+    ],
+    
+    // Moderator - Limited access
+    [AdminRole.MODERATOR]: [
+        'user',
+        'categories',
+        'courses',
+        'modules',
+        'lessons',
+        'reviews',
+        'notifications'
+    ]
+};
+
+// Helper functions for admin roles
+export const getAdminRoleDisplay = (role) => {
+    const roleMap = {
+        [AdminRole.MODERATOR]: 'Moderator',
+        [AdminRole.ADMIN]: 'Admin',
+        [AdminRole.SUPER_ADMIN]: 'Super Admin'
+    };
+    return roleMap[role] || role;
+};
+
+export const getAdminRoleColor = (role) => {
+    const colorMap = {
+        [AdminRole.MODERATOR]: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
+        [AdminRole.ADMIN]: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
+        [AdminRole.SUPER_ADMIN]: 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400'
+    };
+    return colorMap[role] || 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+};
+
+export const getAdminRoleOptions = () => [
+    { value: AdminRole.MODERATOR, label: getAdminRoleDisplay(AdminRole.MODERATOR) },
+    { value: AdminRole.ADMIN, label: getAdminRoleDisplay(AdminRole.ADMIN) },
+    { value: AdminRole.SUPER_ADMIN, label: getAdminRoleDisplay(AdminRole.SUPER_ADMIN) }
+];
+
+// Permission checking functions
+export const hasPermission = (userRole, route) => {
+    if (!userRole || !RoutePermissions[userRole]) return false;
+    return RoutePermissions[userRole].includes(route);
+};
+
+export const canAccessRoute = (userRole, route) => {
+    return hasPermission(userRole, route);
+};
+
+export const getAccessibleRoutes = (userRole) => {
+    return RoutePermissions[userRole] || [];
+};

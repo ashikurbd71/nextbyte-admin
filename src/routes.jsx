@@ -1,14 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
 
 // LAYOUTS
-
 import DashboardLayout from "./components/dashboard/DashboardLayout";
 
 import ErrorPage from "./pages/common/errorPage";
 
 import LoginPage from "./pages/auth/login";
+import AdminLoginPage from "./pages/auth/admin-login";
 
 import PrivateRoute from "./hooks/usePrivateRoute";
+import RoleBasedRoute from "./components/auth/RoleBasedRoute";
 
 import ForgotPasswordRequestPage from "./pages/auth/forgot-password/password-request";
 import ResetPasswordPage from "./pages/auth/forgot-password/reset-password";
@@ -26,7 +27,6 @@ import CategoriesPage from "./pages/dashboard/CategoriesPage";
 import InstructorsPage from "./pages/dashboard/InstructorsPage";
 import CourseEnrollmentViewPage from "./pages/dashboard/CourseEnrollmentViewPage";
 import CourseReviewViewPage from "./pages/dashboard/CourseReviewViewPage";
-import CourseLeaderboardPage from "./pages/dashboard/CourseLeaderboardPage";
 import ModulesPage from "./pages/dashboard/ModulesPage";
 import ModuleDetailsPage from "./pages/dashboard/ModuleDetailsPage";
 import LessonsPage from "./pages/dashboard/LessonsPage";
@@ -40,9 +40,7 @@ import EnrollmentDetailsPage from "./pages/dashboard/EnrollmentDetailsPage";
 import SupportTicketsPage from "./pages/dashboard/SupportTicketsPage";
 
 export const routes = createBrowserRouter([
-
-
-  // Dashboard Routes
+  // Dashboard Routes with Role-Based Access
   {
     path: "/",
     element: <DashboardLayout />,
@@ -53,37 +51,59 @@ export const routes = createBrowserRouter([
       },
       {
         path: "/users",
-        element: <UsersPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="user">
+            <UsersPage />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/instructors",
-        element: <InstructorsPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="instructor">
+            <InstructorsPage />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/courses",
-        element: <CoursesPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="courses">
+            <CoursesPage />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/analytics",
-        element: <AnalyticsPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="analytics">
+            <AnalyticsPage />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/reports",
         element: <ReportsViewPage />,
       },
-
-
       {
         path: "/settings",
         element: <SettingsPage />,
       },
       {
         path: "/notifications",
-        element: <NotificationsPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="notifications">
+            <NotificationsPage />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/categories",
-        element: <CategoriesPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="categories">
+            <CategoriesPage />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/course/:courseId/enrollments",
@@ -94,12 +114,12 @@ export const routes = createBrowserRouter([
         element: <CourseReviewViewPage />,
       },
       {
-        path: "/course/:courseId/leaderboard",
-        element: <CourseLeaderboardPage />,
-      },
-      {
         path: "/modules",
-        element: <ModulesPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="modules">
+            <ModulesPage />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/modules/:moduleId",
@@ -107,7 +127,11 @@ export const routes = createBrowserRouter([
       },
       {
         path: "/lessons",
-        element: <LessonsPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="lessons">
+            <LessonsPage />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/lessons/:lessonId",
@@ -115,19 +139,35 @@ export const routes = createBrowserRouter([
       },
       {
         path: "/assignments",
-        element: <Assignments />,
+        element: (
+          <RoleBasedRoute requiredRoute="assignments">
+            <Assignments />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/assignment-submissions",
-        element: <AssignmentSubmissionsPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="assignment-submissions">
+            <AssignmentSubmissionsPage />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/reviews",
-        element: <ReviewsManagementPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="reviews">
+            <ReviewsManagementPage />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/enrollments",
-        element: <EnrollmentsPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="enrollment">
+            <EnrollmentsPage />
+          </RoleBasedRoute>
+        ),
       },
       {
         path: "/manual-payment",
@@ -139,12 +179,17 @@ export const routes = createBrowserRouter([
       },
       {
         path: "/support-tickets",
-        element: <SupportTicketsPage />,
+        element: (
+          <RoleBasedRoute requiredRoute="support-tickets">
+            <SupportTicketsPage />
+          </RoleBasedRoute>
+        ),
       },
     ],
   },
 
   { path: "/sign-in", element: <LoginPage /> },
+  { path: "/admin/login", element: <AdminLoginPage /> },
   { path: "/register", element: <RegisterPage /> },
   { path: "/forgot-password", element: <ForgotPasswordRequestPage /> },
   { path: "/reset-password", element: <ResetPasswordPage /> },
