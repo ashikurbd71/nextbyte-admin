@@ -26,6 +26,10 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+# Set PNPM_HOME and add it to the PATH to fix global installs
+ENV PNPM_HOME="/pnpm"
+ENV PATH="/pnpm:$PATH"
+
 # Install 'serve', a lightweight static file server
 RUN corepack enable pnpm && pnpm add -g serve
 
