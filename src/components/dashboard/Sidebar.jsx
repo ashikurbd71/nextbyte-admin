@@ -15,8 +15,15 @@ import {
     X,
     Bell,
     ListChecks,
-    UserRoundCog
+    UserRoundCog,
+    Layers,
+    ClipboardList,
+    CheckSquare,
+    Star,
+    GraduationCap,
+    MessageSquare
 } from "lucide-react";
+import logo from "@/assets/icons/colorlogo.png";
 
 const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
     const location = useLocation();
@@ -26,13 +33,21 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
         { icon: BarChart3, label: "Analytics", href: "/analytics" },
         { icon: Users, label: "Users", href: "/users" },
         { icon: UserRoundCog, label: "Instructors", href: "/instructors" },
+        { icon: GraduationCap, label: "Enrollments", href: "/enrollments" },
+
         { icon: ListChecks, label: "Categories", href: "/categories" },
         { icon: BookOpen, label: "Courses", href: "/courses" },
+
+        { icon: Layers, label: "Modules", href: "/modules" },
+        { icon: FileText, label: "Lessons", href: "/lessons" },
+        { icon: ClipboardList, label: "Assignments", href: "/assignments" },
+        { icon: CheckSquare, label: "Submissions", href: "/assignment-submissions" },
+
+        { icon: Star, label: "Reviews", href: "/reviews" },
+        { icon: MessageSquare, label: "Support Tickets", href: "/support-tickets" },
         { icon: Bell, label: "Notifications", href: "/notifications" },
 
-        { icon: Mail, label: "Messages", href: "/messages" },
         { icon: Settings, label: "Settings", href: "/settings" },
-
     ];
 
     const isActive = (href) => {
@@ -60,12 +75,12 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
       `}>
                 {/* Sidebar Header */}
                 <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
-                    <div className="flex items-center space-x-2">
-                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">N</span>
+
+                    <Link to="/">
+                        <div className="flex items-center space-x-2">
+                            <img src={logo} alt="logo" />
                         </div>
-                        <span className="text-xl font-bold text-slate-900 dark:text-white">NextByte</span>
-                    </div>
+                    </Link>
                     <Button
                         variant="ghost"
                         size="icon"
@@ -115,7 +130,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
                         </Button>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 };

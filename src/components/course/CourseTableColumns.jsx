@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { MoreHorizontal, Edit, Trash2, Eye, Users, Star, CheckCircle } from "lucide-react";
+import { MoreHorizontal, Edit, Trash2, Eye, Users, Star, CheckCircle, Trophy } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -22,6 +22,7 @@ export const createCourseTableColumns = ({
     onTogglePublicStatus,
     onViewEnrollments,
     onViewReviews,
+    onViewLeaderboard,
     loadingStates = {},
 }) => [
         {
@@ -255,6 +256,13 @@ export const createCourseTableColumns = ({
                             >
                                 <Star className="mr-2 h-4 w-4" />
                                 View Reviews ({course.reviews?.length || 0})
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => onViewLeaderboard(course.id)}
+                                className="cursor-pointer"
+                            >
+                                <Trophy className="mr-2 h-4 w-4" />
+                                View Leaderboard
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem

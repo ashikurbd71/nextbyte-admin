@@ -67,17 +67,24 @@ const CourseEnrollmentViewPage = () => {
 
         try {
             const exportData = formatEnrollmentDataForExport(filteredEnrollments);
+
+            // Validate export data
+            if (!exportData || exportData.length === 0) {
+                toast.error("No valid data to export");
+                return;
+            }
+
             const filename = `${course?.name || 'Course'}_enrollments_${new Date().toISOString().split('T')[0]}.xlsx`;
             const success = exportToExcel(exportData, filename, 'Course Enrollments');
 
             if (success) {
                 toast.success(`Successfully exported ${filteredEnrollments.length} enrollments to Excel`);
             } else {
-                toast.error("Failed to export enrollments");
+                toast.error("Failed to export enrollments. Please try again.");
             }
         } catch (error) {
             console.error("Export error:", error);
-            toast.error("Error exporting enrollments");
+            toast.error("Error exporting enrollments. Please check your browser settings.");
         }
     };
 

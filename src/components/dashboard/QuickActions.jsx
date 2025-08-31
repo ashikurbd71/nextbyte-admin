@@ -46,10 +46,10 @@ const QuickActions = () => {
                 <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                <Button className="w-full justify-start" variant="outline">
+                {/* <Button className="w-full justify-start" variant="outline">
                     <Calendar className="mr-2 h-4 w-4" />
                     Schedule Meeting
-                </Button>
+                </Button> */}
                 <Button
                     className="w-full justify-start"
                     variant="outline"
@@ -59,10 +59,7 @@ const QuickActions = () => {
                     <Download className="mr-2 h-4 w-4" />
                     Download Report
                 </Button>
-                <Button className="w-full  justify-start" variant="outline">
-                    <Users className="mr-2 h-4 w-4" />
-                    Add New User
-                </Button>
+
 
 
                 <Button className="w-full justify-start" variant="outline">

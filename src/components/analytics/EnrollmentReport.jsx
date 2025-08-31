@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Download, Users, Activity, Target, TrendingUp, CalendarDays } from "lucide-react";
 import DatePicker from "./DatePicker";
 import Loader from "@/components/loader/Loader";
-import { exportToExcel, formatEnrollmentDataForExport } from "@/utils/excel-export";
+import { exportToExcel } from "@/utils/excel-export";
+import { formatEnrollmentDataForExport } from "@/utils/enrollmentUtils";
 import toast from "react-hot-toast";
 
 const EnrollmentReport = ({
@@ -30,21 +31,30 @@ const EnrollmentReport = ({
         }
 
         try {
-            const exportData = formatEnrollmentDataForExport(enrollmentData);
+            // Handle different enrollment data structures
+            const enrollmentDataToExport = enrollmentData?.enrollments || enrollmentData || [];
+            const exportData = formatEnrollmentDataForExport(enrollmentDataToExport);
+
+            // Validate export data
+            if (!exportData || exportData.length === 0) {
+                toast.error("No enrollment data available for export");
+                return;
+            }
+
             const success = exportToExcel(
-                exportData, 
+                exportData,
                 `enrollment-report-${enrollmentDateRange.startDate}-to-${enrollmentDateRange.endDate}.xlsx`,
                 'Enrollment Report'
             );
-            
+
             if (success) {
                 toast.success("Enrollment report exported successfully!");
             } else {
-                toast.error("Failed to export enrollment report");
+                toast.error("Failed to export enrollment report. Please try again.");
             }
         } catch (error) {
             console.error("Export error:", error);
-            toast.error("Error exporting enrollment report");
+            toast.error("Error exporting enrollment report. Please check your browser settings.");
         }
     };
 
@@ -67,8 +77,8 @@ const EnrollmentReport = ({
                             onReset={handleResetEnrollmentDateRange}
                             title="Select Enrollment Date Range"
                         />
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             size="sm"
                             onClick={handleExportEnrollment}
                             disabled={!enrollmentData || enrollmentLoading}

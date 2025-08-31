@@ -26,6 +26,18 @@ import CategoriesPage from "./pages/dashboard/CategoriesPage";
 import InstructorsPage from "./pages/dashboard/InstructorsPage";
 import CourseEnrollmentViewPage from "./pages/dashboard/CourseEnrollmentViewPage";
 import CourseReviewViewPage from "./pages/dashboard/CourseReviewViewPage";
+import CourseLeaderboardPage from "./pages/dashboard/CourseLeaderboardPage";
+import ModulesPage from "./pages/dashboard/ModulesPage";
+import ModuleDetailsPage from "./pages/dashboard/ModuleDetailsPage";
+import LessonsPage from "./pages/dashboard/LessonsPage";
+import LessonDetailPage from "./pages/dashboard/LessonDetailPage";
+import Assignments from "./pages/dashboard/Assignments";
+import AssignmentSubmissionsPage from "./pages/dashboard/AssignmentSubmissionsPage";
+import ReviewsManagementPage from "./pages/dashboard/ReviewsManagementPage";
+import ManualPaymentPage from "./pages/dashboard/ManualPaymentPage";
+import EnrollmentsPage from "./pages/dashboard/EnrollmentsPage";
+import EnrollmentDetailsPage from "./pages/dashboard/EnrollmentDetailsPage";
+import SupportTicketsPage from "./pages/dashboard/SupportTicketsPage";
 
 export const routes = createBrowserRouter([
 
@@ -59,14 +71,8 @@ export const routes = createBrowserRouter([
         path: "/reports",
         element: <ReportsViewPage />,
       },
-      {
-        path: "/calendar",
-        element: <div className="p-6"><h1 className="text-2xl font-bold">Calendar</h1><p>Calendar page coming soon...</p></div>,
-      },
-      {
-        path: "/messages",
-        element: <div className="p-6"><h1 className="text-2xl font-bold">Messages</h1><p>Messages page coming soon...</p></div>,
-      },
+
+
       {
         path: "/settings",
         element: <SettingsPage />,
@@ -86,6 +92,54 @@ export const routes = createBrowserRouter([
       {
         path: "/course/:courseId/reviews",
         element: <CourseReviewViewPage />,
+      },
+      {
+        path: "/course/:courseId/leaderboard",
+        element: <CourseLeaderboardPage />,
+      },
+      {
+        path: "/modules",
+        element: <ModulesPage />,
+      },
+      {
+        path: "/modules/:moduleId",
+        element: <ModuleDetailsPage />,
+      },
+      {
+        path: "/lessons",
+        element: <LessonsPage />,
+      },
+      {
+        path: "/lessons/:lessonId",
+        element: <LessonDetailPage />,
+      },
+      {
+        path: "/assignments",
+        element: <Assignments />,
+      },
+      {
+        path: "/assignment-submissions",
+        element: <AssignmentSubmissionsPage />,
+      },
+      {
+        path: "/reviews",
+        element: <ReviewsManagementPage />,
+      },
+      {
+        path: "/enrollments",
+        element: <EnrollmentsPage />,
+      },
+      {
+        path: "/manual-payment",
+        element: <ManualPaymentPage />,
+      },
+      {
+        path: "/enrollments/:enrollmentId",
+        element: <EnrollmentDetailsPage />,
+      },
+      {
+        path: "/support-tickets",
+        element: <SupportTicketsPage />,
       },
     ],
   },

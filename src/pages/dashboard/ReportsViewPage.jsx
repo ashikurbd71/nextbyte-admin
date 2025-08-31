@@ -24,7 +24,8 @@ import {
     XCircle,
     AlertCircle
 } from "lucide-react";
-import { exportToExcel, formatDashboardDataForExport, formatEarningsDataForExport, formatEnrollmentDataForExport } from "@/utils/excel-export";
+import { exportToExcel, formatDashboardDataForExport, formatEarningsDataForExport } from "@/utils/excel-export";
+import { formatEnrollmentDataForExport } from "@/utils/enrollmentUtils";
 import toast from "react-hot-toast";
 import Loader from "@/components/loader/Loader";
 
@@ -61,7 +62,16 @@ const ReportsViewPage = () => {
                     sheetName = 'Earnings Report';
                     break;
                 case 'enrollment':
-                    exportData = formatEnrollmentDataForExport(enrollmentData);
+                    // Handle different enrollment data structures
+                    const enrollmentDataToExport = enrollmentData?.enrollments || enrollmentData || [];
+                    exportData = formatEnrollmentDataForExport(enrollmentDataToExport);
+
+                    // Validate export data
+                    if (!exportData || exportData.length === 0) {
+                        toast.error("No enrollment data available for export");
+                        return;
+                    }
+
                     filename = `enrollment-report-${enrollmentDateRange.startDate}-to-${enrollmentDateRange.endDate}.xlsx`;
                     sheetName = 'Enrollment Report';
                     break;

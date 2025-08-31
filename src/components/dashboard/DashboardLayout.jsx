@@ -14,13 +14,23 @@ const DashboardLayout = () => {
     // Get page title based on current route
     const getPageTitle = () => {
         const path = location.pathname;
-        if (path === "/dashboard") return "Dashboard";
-        if (path === "/dashboard/users") return "Users Management";
-        if (path === "/dashboard/analytics") return "Analytics";
-        if (path === "/dashboard/reports") return "Reports";
-        if (path === "/dashboard/calendar") return "Calendar";
-        if (path === "/dashboard/messages") return "Messages";
-        if (path === "/dashboard/settings") return "Settings";
+        if (path === "/") return "Dashboard";
+        if (path === "/users") return "Users Management";
+        if (path === "/analytics") return "Analytics";
+        if (path === "/reports") return "Reports";
+        if (path === "/calendar") return "Calendar";
+        if (path === "/messages") return "Messages";
+        if (path === "/settings") return "Settings";
+        if (path === "/assignments") return "Assignments";
+        if (path === "/courses") return "Courses";
+        if (path === "/enrollments") return "Enrollments Management";
+        if (path === "/manual-payment") return "Manual Payment";
+        if (path === "/modules") return "Modules";
+        if (path === "/lessons") return "Lessons";
+        if (path === "/instructors") return "Instructors";
+        if (path === "/categories") return "Categories";
+        if (path === "/support-tickets") return "Support Tickets";
+        if (path === "/notifications") return "Notifications";
         return "Dashboard";
     };
 

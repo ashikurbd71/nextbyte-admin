@@ -3,6 +3,12 @@ import * as XLSX from 'xlsx';
 // Utility function to export data to Excel
 export const exportToExcel = (data, filename = 'report.xlsx', sheetName = 'Report') => {
     try {
+        // Validate input data
+        if (!data || !Array.isArray(data) || data.length === 0) {
+            console.error('Invalid data for Excel export:', data);
+            return false;
+        }
+
         // Create a new workbook
         const workbook = XLSX.utils.book_new();
 
@@ -17,12 +23,20 @@ export const exportToExcel = (data, filename = 'report.xlsx', sheetName = 'Repor
 
         // Create a blob and download link
         const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+        // Check if URL.createObjectURL is supported
+        if (!window.URL || !window.URL.createObjectURL) {
+            console.error('URL.createObjectURL is not supported in this browser');
+            return false;
+        }
+
         const url = window.URL.createObjectURL(blob);
 
         // Create download link and trigger download
         const link = document.createElement('a');
         link.href = url;
         link.download = filename;
+        link.style.display = 'none';
         document.body.appendChild(link);
         link.click();
 
@@ -70,15 +84,4 @@ export const formatEarningsDataForExport = (earningsData) => {
 };
 
 // Function to format enrollment data for Excel export
-export const formatEnrollmentDataForExport = (enrollmentData) => {
-    if (!enrollmentData || !enrollmentData.enrollments) return [];
-
-    return enrollmentData.enrollments.map(enrollment => ({
-        'Enrollment ID': enrollment.id || '',
-        'Student Name': enrollment.studentName || '',
-        'Course': enrollment.course || '',
-        'Status': enrollment.status || '',
-        'Enrollment Date': enrollment.enrollmentDate || '',
-        'Completion Date': enrollment.completionDate || ''
-    }));
-};
+// This function is now imported from enrollmentUtils.js to avoid conflicts

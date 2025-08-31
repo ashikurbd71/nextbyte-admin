@@ -1,3 +1,8 @@
+export function formatDate(dateString) {
+  if (!dateString) return "N/A";
+  return new Date(dateString).toLocaleDateString();
+}
+
 export function formatRelativeDate(dateString) {
   const inputDate = new Date(dateString);
   const now = new Date();

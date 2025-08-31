@@ -108,6 +108,9 @@ const CoursesPage = () => {
         onViewReviews: (courseId) => {
             navigate(`/course/${courseId}/reviews`);
         },
+        onViewLeaderboard: (courseId) => {
+            navigate(`/course/${courseId}/leaderboard`);
+        },
         loadingStates
     });
 

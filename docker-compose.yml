@@ -1,0 +1,32 @@
+services:
+  admin-server:
+    build: .
+    image: nextbyte-admin
+    container_name: "nextbyte-admin-server"
+    restart: always
+    env_file:
+      - ./.env
+
+    networks:
+      - proxy
+    labels:
+      # --- Traefik Configuration ---
+      - "traefik.enable=true"
+      # Rule to route traffic for the specified host
+      - "traefik.http.routers.admin-server.rule=Host(`admin.nextbyteitinstitute.com`)"
+      - "traefik.http.routers.admin-server.priority=10"
+      # Use the 'websecure' entrypoint (typically for HTTPS)
+      - "traefik.http.routers.admin-server.entrypoints=websecure"
+      # Enable TLS and specify the Let's Encrypt resolver
+      - "traefik.http.routers.admin-server.tls.certresolver=leresolver"
+      - "traefik.http.routers.admin-server.tls=true"
+      # Link the router to the service definition below
+      - "traefik.http.routers.admin-server.service=admin-server"
+      # Tell Traefik which port the application is running on inside the container
+      - "traefik.http.services.admin-server.loadbalancer.server.port=5173"
+
+# Defines the external network created by Traefik
+networks:
+  proxy:
+    external: true
+    name: traefik_proxy

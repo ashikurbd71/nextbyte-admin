@@ -66,6 +66,10 @@ export const filterEnrollments = (enrollments, searchTerm, statusFilter) => {
 
 // Format enrollment data for Excel export
 export const formatEnrollmentDataForExport = (enrollments) => {
+    if (!enrollments || !Array.isArray(enrollments)) {
+        return [];
+    }
+
     return enrollments.map(enrollment => {
         const student = enrollment.student || enrollment;
         return {
@@ -73,7 +77,7 @@ export const formatEnrollmentDataForExport = (enrollments) => {
             'Student Name': student.name || 'Unknown',
             'Email': student.email || 'No email',
             'Phone': student.phone || 'No phone',
-            'Course Name': enrollment.courseName || 'N/A',
+            'Course Name': enrollment.courseName || enrollment.course?.name || 'N/A',
             'Progress': enrollment.progress ? `${enrollment.progress}%` : '0%',
             'Status': enrollment.status || 'N/A',
             'Amount Paid': enrollment.amountPaid ? `$${enrollment.amountPaid}` : 'N/A',
