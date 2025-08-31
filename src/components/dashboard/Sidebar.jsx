@@ -147,7 +147,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
                     <div className="flex items-center space-x-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-800">
                         <Link to="/settings">
                             <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                <img src={admin.photoUrl} alt="Admin" className="w-full h-full rounded-full object-cover" />
+                                <img src={admin?.photoUrl} alt="Admin" className="w-full h-full rounded-full object-cover" />
                             </div>
                         </Link>
                         <div className="flex-1 min-w-0">
