@@ -28,7 +28,8 @@ const SupportTicketsPage = () => {
     // API hooks
     const { data: tickets = [], isLoading, error, refetch } = useGetSupportTicketsQuery();
     const { data: stats, isLoading: statsLoading } = useGetSupportTicketStatsQuery();
-    const { data: mentors = [], isLoading: mentorsLoading } = useGetMentorsQuery();
+    const { data: mentorsData, isLoading: mentorsLoading } = useGetMentorsQuery();
+    const mentors = mentorsData?.data || [];
 
     // Support ticket actions hook
     const {

@@ -1,4 +1,3 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import { useGetDashboardStatsQuery } from "@/features/dashboard/dashboardApi";
 import Loader from "@/components/loader/Loader";

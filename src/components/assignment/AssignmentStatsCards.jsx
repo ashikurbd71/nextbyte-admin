@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Award, Clock, CheckCircle, AlertCircle, TrendingUp } from "lucide-react";
 

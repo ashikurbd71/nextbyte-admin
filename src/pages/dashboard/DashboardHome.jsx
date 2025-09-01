@@ -1,4 +1,3 @@
-import React from "react";
 import { useGetDashboardStatsQuery } from "@/features/dashboard/dashboardApi";
 import Loader from "@/components/loader/Loader";
 import {

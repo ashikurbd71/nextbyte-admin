@@ -7,14 +7,38 @@ const getStoredAdminData = () => {
         let adminData = localStorage.getItem('adminData');
         let adminToken = localStorage.getItem('adminToken');
 
-        // If not in localStorage, try sessionStorage
-        if (!adminData || !adminToken) {
-            adminData = sessionStorage.getItem('adminData');
-            adminToken = sessionStorage.getItem('adminToken');
+        // Validate the data before using it
+        if (adminData && adminToken) {
+            const parsedAdmin = JSON.parse(adminData);
+            // Basic validation - ensure we have required fields
+            if (parsedAdmin && parsedAdmin.id && parsedAdmin.email && adminToken) {
+                return { admin: parsedAdmin, token: adminToken };
+            }
         }
 
-        return adminData ? { admin: JSON.parse(adminData), token: adminToken } : null;
+        // If localStorage data is invalid, try sessionStorage
+        adminData = sessionStorage.getItem('adminData');
+        adminToken = sessionStorage.getItem('adminToken');
+
+        if (adminData && adminToken) {
+            const parsedAdmin = JSON.parse(adminData);
+            if (parsedAdmin && parsedAdmin.id && parsedAdmin.email && adminToken) {
+                return { admin: parsedAdmin, token: adminToken };
+            }
+        }
+
+        return null;
     } catch (error) {
+        console.error('Error reading from storage:', error);
+        // Clear corrupted data
+        try {
+            localStorage.removeItem('adminData');
+            localStorage.removeItem('adminToken');
+            sessionStorage.removeItem('adminData');
+            sessionStorage.removeItem('adminToken');
+        } catch (clearError) {
+            console.error('Error clearing corrupted storage:', clearError);
+        }
         return null;
     }
 };
@@ -43,12 +67,15 @@ const adminAuthSlice = createSlice({
             try {
                 localStorage.setItem('adminData', JSON.stringify(admin));
                 localStorage.setItem('adminToken', token);
-
             } catch (error) {
                 console.error('Redux: Error storing in localStorage:', error);
                 // Fallback to sessionStorage
-                sessionStorage.setItem('adminData', JSON.stringify(admin));
-                sessionStorage.setItem('adminToken', token);
+                try {
+                    sessionStorage.setItem('adminData', JSON.stringify(admin));
+                    sessionStorage.setItem('adminToken', token);
+                } catch (sessionError) {
+                    console.error('Redux: Error storing in sessionStorage:', sessionError);
+                }
             }
         },
         adminLoggedOut: (state) => {
@@ -58,10 +85,14 @@ const adminAuthSlice = createSlice({
             state.isLoading = false;
 
             // Clear from both localStorage and sessionStorage
-            localStorage.removeItem('adminData');
-            localStorage.removeItem('adminToken');
-            sessionStorage.removeItem('adminData');
-            sessionStorage.removeItem('adminToken');
+            try {
+                localStorage.removeItem('adminData');
+                localStorage.removeItem('adminToken');
+                sessionStorage.removeItem('adminData');
+                sessionStorage.removeItem('adminToken');
+            } catch (error) {
+                console.error('Error clearing storage on logout:', error);
+            }
         },
         setAdminLoading: (state, action) => {
             state.isLoading = action.payload;
@@ -74,8 +105,19 @@ const adminAuthSlice = createSlice({
             try {
                 localStorage.setItem('adminData', JSON.stringify(updatedAdmin));
             } catch (error) {
-                sessionStorage.setItem('adminData', JSON.stringify(updatedAdmin));
+                console.error('Error updating localStorage:', error);
+                try {
+                    sessionStorage.setItem('adminData', JSON.stringify(updatedAdmin));
+                } catch (sessionError) {
+                    console.error('Error updating sessionStorage:', sessionError);
+                }
             }
+        },
+        clearAuthData: (state) => {
+            state.admin = null;
+            state.token = null;
+            state.isAuthenticated = false;
+            state.isLoading = false;
         },
     },
 });
@@ -85,6 +127,7 @@ export const {
     adminLoggedOut,
     setAdminLoading,
     updateAdminProfile,
+    clearAuthData,
 } = adminAuthSlice.actions;
 
 export default adminAuthSlice.reducer;

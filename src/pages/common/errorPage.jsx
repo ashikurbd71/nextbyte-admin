@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import errorIcon from "@/assets/images/error_icon.svg";
 

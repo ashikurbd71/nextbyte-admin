@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, Mail, Phone, MapPin, Calendar, User, GraduationCap, BookOpen, Shield, ShieldOff, CheckCircle, XCircle } from "lucide-react";

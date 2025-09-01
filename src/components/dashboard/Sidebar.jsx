@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
@@ -53,7 +52,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
         } else {
             // Handle regular user logout if needed
             toast.success('Logged out successfully');
-            navigate('/sign-in');
+            navigate('/admin/login');
         }
     };
 

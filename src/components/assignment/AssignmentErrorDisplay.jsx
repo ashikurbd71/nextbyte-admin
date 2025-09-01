@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, RefreshCw, X } from "lucide-react";
@@ -85,7 +84,7 @@ const AssignmentErrorDisplay = ({
                 )}
 
                 {/* Additional error details for development */}
-                {process.env.NODE_ENV === 'development' && error?.originalError && (
+                {import.meta.env.DEV && error?.originalError && (
                     <details className="mt-4">
                         <summary className="text-xs text-red-600 cursor-pointer hover:text-red-700">
                             Show Technical Details

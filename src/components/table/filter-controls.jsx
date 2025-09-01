@@ -1,4 +1,3 @@
-import React from "react";
 import Dropdown from "../dropdown/dropdown";
 import SearchBar from "../input/search-bar";
 

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const useAuth = () => {
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, isLoading: authLoading } = useSelector((state) => state.adminAuth);
   const [authChecked, setAuthChecked] = useState(false);
 
   // const { data, isSuccess, isLoading, refetch } = useGetMyProfileQuery(
@@ -16,26 +16,30 @@ const useAuth = () => {
   // );
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    // Set authChecked to true after a short delay to ensure Redux state is initialized
+    const timer = setTimeout(() => {
       setAuthChecked(true);
-      return;
-    }
+    }, 100);
 
-    // if (isSuccess && data?.data) {
-    //   dispatch(userDetailsFetched(data.data));
-    //   setAuthChecked(true);
-    // }
-  }, [
-    // isSuccess,
-    //  data,
-    dispatch,
-    isAuthenticated,
-  ]);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Additional check for when authentication state changes
+  useEffect(() => {
+    if (authChecked) {
+      // If we're authenticated but still loading, wait for loading to complete
+      if (isAuthenticated && authLoading) {
+        return;
+      }
+      // If we're not authenticated, we're done checking
+      if (!isAuthenticated) {
+        return;
+      }
+    }
+  }, [isAuthenticated, authLoading, authChecked]);
 
   return {
-    isLoading:
-      //  isLoading ||
-      isAuthenticated && !authChecked,
+    isLoading: authLoading || (isAuthenticated && !authChecked),
     authChecked,
     // refetchProfile: refetch,
   };

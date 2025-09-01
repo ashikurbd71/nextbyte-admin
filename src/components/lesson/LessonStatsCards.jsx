@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Play, FileText, Eye, Clock, Users, TrendingUp, Video } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";

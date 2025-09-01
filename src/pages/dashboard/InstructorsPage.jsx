@@ -283,7 +283,7 @@ const InstructorsPage = () => {
                         <SelectItem value="all">All Roles</SelectItem>
                         <SelectItem value="super_admin">Super Admin</SelectItem>
                         <SelectItem value="admin">Admin</SelectItem>
-                        <SelectItem value="instructor">Instructor</SelectItem>
+                        <SelectItem value="moderator">Moderator</SelectItem>
                     </SelectContent>
                 </Select>
 

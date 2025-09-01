@@ -1,11 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { userLoggedIn, userLoggedOut } from "@/features/auth/authSlice";
+import {
+  adminLoggedIn,
+  adminLoggedOut,
+} from "@/features/adminauth/adminAuthSlice";
 import { getTokens } from "@/hooks/useToken";
 
-
 const BASE_URL = import.meta.env.VITE_API_URL || "/api/v1";
-const MAX_RETRY_COUNT = 3;
 
+// base fetch query
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
   prepareHeaders: (headers) => {
@@ -17,78 +19,18 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithReauth = async (args, api, extraOptions) => {
-  let result = await baseQuery(args, api, extraOptions);
-
-  const { accessToken, refreshToken, rememberMe } = getTokens();
-  let retryCount = 0;
-
-  while (
-    (!accessToken || (result.error && result.error.status === 401)) &&
-    retryCount < MAX_RETRY_COUNT
-  ) {
-    retryCount++;
-    try {
-      if (refreshToken) {
-        const refreshResult = await baseQuery(
-          {
-            url: "/auth/refresh-token",
-            method: "POST",
-            body: { refreshToken },
-            credentials: "include",
-          },
-          api,
-          extraOptions,
-        );
-
-        if (refreshResult.data?.success) {
-          // Clear existing cache before logging in new user
-          api.dispatch(apiSlice.util.resetApiState());
-
-          api.dispatch(
-            userLoggedIn({
-              accessToken: refreshResult?.data?.data?.accessToken,
-              refreshToken: refreshResult?.data?.data?.refreshToken,
-              rememberMe,
-            }),
-          );
-
-          // Retry the original request with new token
-          result = await baseQuery(args, api, extraOptions);
-          break;
-        } else {
-          api.dispatch(userLoggedOut());
-          api.dispatch(apiSlice.util.resetApiState());
-          break;
-        }
-      } else {
-        api.dispatch(userLoggedOut());
-        api.dispatch(apiSlice.util.resetApiState());
-        break;
-      }
-    } catch (error) {
-      console.error("Refresh token failed:", error);
-      api.dispatch(userLoggedOut());
-      api.dispatch(apiSlice.util.resetApiState());
-      break;
-    }
-  }
-
-  return result;
-};
-
 // Middleware to clear cache when user changes
 const customMiddleware = (api) => (next) => (action) => {
-  if (action.type === "auth/userLoggedIn") {
-    // Clear all cache when a new user logs in
-    api.dispatch(apiSlice.util.resetApiState());
+  if (action.type === "adminauth/adminLoggedIn") {
+    api.dispatch(api.util.resetApiState());
   }
   return next(action);
 };
 
+// main api slice
 export const apiSlice = createApi({
   reducerPath: "apiSlice",
-  baseQuery: baseQuery,
+  baseQuery: baseQuery, // refresh token নাই, তাই শুধু baseQuery ব্যবহার করছি
   tagTypes: [
     "auth",
     "dashboard",
@@ -130,9 +72,9 @@ export const apiSlice = createApi({
     "support-ticket-statistics",
     "mentors",
   ],
-  keepUnusedDataFor: 0, // Don't keep any unused data
-  refetchOnMountOrArgChange: true, // Always refetch when component mounts
-  refetchOnReconnect: true, // Refetch on reconnection
+  keepUnusedDataFor: 0,
+  refetchOnMountOrArgChange: true,
+  refetchOnReconnect: true,
   endpoints: (builder) => ({}),
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(customMiddleware),
@@ -144,10 +86,9 @@ export const {
 } = apiSlice;
 
 export const setupApiSlice = (store) => {
-  // Subscribe to store changes to handle user logout
   store.subscribe(() => {
     const state = store.getState();
-    if (!state.auth.isAuthenticated) {
+    if (!state.adminAuth.isAuthenticated) {
       store.dispatch(resetApiState());
     }
   });

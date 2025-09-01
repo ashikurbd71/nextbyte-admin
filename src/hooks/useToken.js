@@ -4,7 +4,8 @@ export const getTokens = () => {
   const { accessToken: cookieAccessToken, refreshToken: cookieRefreshToken } =
     getAuthCookie();
 
-  const sessionAccessToken = sessionStorage.getItem("accessToken");
+  const sessionAccessToken = sessionStorage.getItem
+    ("accessToken");
   const sessionRefreshToken = sessionStorage.getItem("refreshToken");
 
   if (!!cookieRefreshToken) {

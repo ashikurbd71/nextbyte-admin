@@ -1,4 +1,3 @@
-import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,9 +34,9 @@ const AssignTicketModal = ({
                             </SelectTrigger>
                             <SelectContent>
                                 {mentorsLoading ? (
-                                    <SelectItem value="" disabled>Loading mentors...</SelectItem>
+                                    <SelectItem value="loading" disabled>Loading mentors...</SelectItem>
                                 ) : mentors.length === 0 ? (
-                                    <SelectItem value="" disabled>No mentors available</SelectItem>
+                                    <SelectItem value="no-mentors" disabled>No mentors available</SelectItem>
                                 ) : (
                                     mentors.map((mentor) => (
                                         <SelectItem key={mentor.id} value={mentor.id.toString()}>

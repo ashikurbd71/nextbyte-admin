@@ -80,9 +80,9 @@ export const supportTicketsApiSlice = apiSlice.injectEndpoints({
             providesTags: ["support-ticket-statistics"],
         }),
 
-        // Get mentors for assignment
+        // Get mentors for assignment (using admin API)
         getMentors: builder.query({
-            query: () => "/mentors",
+            query: () => "/admin",
             providesTags: ["mentors"],
         }),
     }),

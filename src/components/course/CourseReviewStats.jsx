@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { BookOpen, Star, MessageSquare, TrendingUp } from "lucide-react";
 

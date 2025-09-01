@@ -5,15 +5,10 @@ import DashboardLayout from "./components/dashboard/DashboardLayout";
 
 import ErrorPage from "./pages/common/errorPage";
 
-import LoginPage from "./pages/auth/login";
 import AdminLoginPage from "./pages/auth/admin-login";
 
-import PrivateRoute from "./hooks/usePrivateRoute";
+import AuthGuard from "./components/auth/AuthGuard";
 import RoleBasedRoute from "./components/auth/RoleBasedRoute";
-
-import ForgotPasswordRequestPage from "./pages/auth/forgot-password/password-request";
-import ResetPasswordPage from "./pages/auth/forgot-password/reset-password";
-import RegisterPage from "./pages/auth/register";
 
 // DASHBOARD PAGES
 import DashboardHome from "./pages/dashboard/DashboardHome";
@@ -43,7 +38,11 @@ export const routes = createBrowserRouter([
   // Dashboard Routes with Role-Based Access
   {
     path: "/",
-    element: <DashboardLayout />,
+    element: (
+      <AuthGuard requireAuth={true}>
+        <DashboardLayout />
+      </AuthGuard>
+    ),
     children: [
       {
         path: "/",
@@ -188,10 +187,13 @@ export const routes = createBrowserRouter([
     ],
   },
 
-  { path: "/sign-in", element: <LoginPage /> },
-  { path: "/admin/login", element: <AdminLoginPage /> },
-  { path: "/register", element: <RegisterPage /> },
-  { path: "/forgot-password", element: <ForgotPasswordRequestPage /> },
-  { path: "/reset-password", element: <ResetPasswordPage /> },
+  {
+    path: "/admin/login",
+    element: (
+      <AuthGuard requireAuth={false} redirectTo="/">
+        <AdminLoginPage />
+      </AuthGuard>
+    )
+  },
   { path: "*", element: <ErrorPage /> },
 ]);

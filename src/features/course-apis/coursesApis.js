@@ -137,7 +137,7 @@ export const courseApiSlice = apiSlice.injectEndpoints({
 
         // Get course enrollments with detailed information
         getCourseEnrollmentsDetailed: builder.query({
-            query: (courseId) => `/course/${courseId}/enrollments/detailed`,
+            query: (courseId) => `/enrollments/course/${courseId}/student`,
             providesTags: (result, error, courseId) => [
                 { type: "course-enrollments", id: courseId },
             ],

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useGetCourseByIdQuery, useSendEmailToEnrollmentsMutation, useSendEmailToStudentMutation } from "@/features/course-apis/coursesApis";
+import { useGetCourseByIdQuery, useGetCourseEnrollmentsDetailedQuery, useSendEmailToEnrollmentsMutation, useSendEmailToStudentMutation } from "@/features/course-apis/coursesApis";
 import { useGetUserEnrollmentPerformanceQuery } from "@/features/user/userApis";
 import { exportToExcel } from "@/utils/excel-export";
 import { toast } from "react-hot-toast";
@@ -11,6 +11,7 @@ import CourseEnrollmentHeader from "@/components/course/CourseEnrollmentHeader";
 import CourseInfoCard from "@/components/course/CourseInfoCard";
 import EnrollmentActionsBar from "@/components/course/EnrollmentActionsBar";
 import EnrollmentTable from "@/components/course/EnrollmentTable";
+import EnrollmentStatistics from "@/components/course/EnrollmentStatistics";
 import EmailModal from "@/components/course/EmailModal";
 import StudentProgressModal from "@/components/course/StudentProgressModal";
 import ErrorDisplay from "@/components/course/ErrorDisplay";
@@ -44,6 +45,7 @@ const CourseEnrollmentViewPage = () => {
 
     // Fetch course details and detailed enrollments
     const { data: course, isLoading: courseLoading, error: courseError } = useGetCourseByIdQuery(courseId);
+    const { data: enrollmentData, isLoading: enrollmentLoading, error: enrollmentError } = useGetCourseEnrollmentsDetailedQuery(courseId);
     const [sendEmailToEnrollments, { isLoading: isSendingEmail }] = useSendEmailToEnrollmentsMutation();
     const [sendEmailToStudent, { isLoading: isSendingIndividualEmail }] = useSendEmailToStudentMutation();
 
@@ -52,8 +54,9 @@ const CourseEnrollmentViewPage = () => {
         skip: !selectedStudent?.id || !showProgressModal,
     });
 
-    // Get enrollments from course data
-    const enrollments = course?.data?.students || [];
+    // Get enrollments and statistics from enrollment data
+    const enrollments = enrollmentData?.students || [];
+    const statistics = enrollmentData?.statistics || null;
 
     // Filter enrollments using utility function
     const filteredEnrollments = filterEnrollments(enrollments, searchTerm, statusFilter);
@@ -168,7 +171,7 @@ const CourseEnrollmentViewPage = () => {
         setSelectedStudent(null);
     };
 
-    if (courseLoading) {
+    if (courseLoading || enrollmentLoading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <Loader variant="ring" size="lg" text="Loading course enrollments..." />
@@ -176,7 +179,7 @@ const CourseEnrollmentViewPage = () => {
         );
     }
 
-    if (courseError) {
+    if (courseError || enrollmentError) {
         return <ErrorDisplay onGoBack={() => navigate(-1)} />;
     }
 
@@ -193,6 +196,11 @@ const CourseEnrollmentViewPage = () => {
                 course={course}
                 enrollmentsCount={enrollments.length}
             />
+
+            {/* Statistics */}
+            {statistics && (
+                <EnrollmentStatistics statistics={statistics} />
+            )}
 
             {/* Actions Bar */}
             <EnrollmentActionsBar

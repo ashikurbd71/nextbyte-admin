@@ -45,19 +45,19 @@ export const formatDate = (dateString) => {
 
 // Filter enrollments based on search and status
 export const filterEnrollments = (enrollments, searchTerm, statusFilter) => {
-    return enrollments.filter(enrollment => {
-        const student = enrollment.student || enrollment;
-        const matchesSearch = student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            student.email?.toLowerCase().includes(searchTerm.toLowerCase());
+    return enrollments.filter(student => {
+        const matchesSearch = student.studentName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            student.studentEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            student.studentPhone?.toLowerCase().includes(searchTerm.toLowerCase());
 
         // Filter by enrollment status
         let matchesStatus = true;
         if (statusFilter === "active") {
-            matchesStatus = enrollment.status === "active";
+            matchesStatus = student.status === "active";
         } else if (statusFilter === "completed") {
-            matchesStatus = enrollment.status === "completed";
+            matchesStatus = student.status === "completed";
         } else if (statusFilter === "pending") {
-            matchesStatus = enrollment.status === "pending";
+            matchesStatus = student.status === "pending";
         }
 
         return matchesSearch && matchesStatus;
@@ -70,19 +70,18 @@ export const formatEnrollmentDataForExport = (enrollments) => {
         return [];
     }
 
-    return enrollments.map(enrollment => {
-        const student = enrollment.student || enrollment;
+    return enrollments.map(student => {
         return {
-            'Student ID': student.id || '',
-            'Student Name': student.name || 'Unknown',
-            'Email': student.email || 'No email',
-            'Phone': student.phone || 'No phone',
-            'Course Name': enrollment.courseName || enrollment.course?.name || 'N/A',
-            'Progress': enrollment.progress ? `${enrollment.progress}%` : '0%',
-            'Status': enrollment.status || 'N/A',
-            'Amount Paid': enrollment.amountPaid ? `$${enrollment.amountPaid}` : 'N/A',
-            'Enrolled Date': enrollment.enrolledAt ? new Date(enrollment.enrolledAt).toLocaleDateString() : 'N/A',
-            'Completed Date': enrollment.completedAt ? new Date(enrollment.completedAt).toLocaleDateString() : 'N/A'
+            'Student ID': student.studentId || '',
+            'Student Name': student.studentName || 'Unknown',
+            'Email': student.studentEmail || 'No email',
+            'Phone': student.studentPhone || 'No phone',
+            'Progress': student.progress ? `${student.progress}%` : '0%',
+            'Status': student.status || 'N/A',
+            'Payment Status': student.paymentStatus || 'N/A',
+            'Amount Paid': student.amountPaid ? `$${student.amountPaid}` : 'N/A',
+            'Enrolled Date': student.enrolledAt ? new Date(student.enrolledAt).toLocaleDateString() : 'N/A',
+            'Completed Date': student.completedAt ? new Date(student.completedAt).toLocaleDateString() : 'N/A'
         };
     });
 };

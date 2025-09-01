@@ -1,4 +1,3 @@
-import React from "react";
 import { Star } from "lucide-react";
 
 const StarRating = ({ rating, size = "h-4 w-4", showNumber = false }) => {

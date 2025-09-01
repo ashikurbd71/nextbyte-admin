@@ -1,4 +1,3 @@
-import React from "react";
 import { RouterProvider } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { routes } from "./routes";
@@ -10,10 +9,22 @@ import { DarkModeProvider } from "./hooks/dark-mode";
 // components
 import AtomLoader from "./components/loader/AtomLoader";
 
+// utils
+import { initializeStorageCleanup } from "./utils/storageDebug";
+import { exposeAuthDebug } from "./utils/authUtils";
+
 // styles
 import "./assets/styles/global.css";
 import "./assets/styles/typography.css";
 import "./assets/styles/layout.css";
+
+// Initialize storage cleanup on app start
+initializeStorageCleanup();
+
+// Expose debug functions in development
+if (import.meta.env.DEV) {
+  exposeAuthDebug();
+}
 
 const App = () => {
   const { isLoading, authChecked } = useAuth();
