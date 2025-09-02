@@ -3,7 +3,7 @@
  * Handles file uploads to the CDN server
  */
 
-const CDN_BASE_URL = import.meta.env.VITE_PUBLIC_CDN_URL || 'http://admin.nextbyteitinstitute.com'
+const CDN_BASE_URL = "https://cdn.nextbyteitinstitute.com"
 console.log(CDN_BASE_URL)
 /**
  * Upload a file to the CDN server
