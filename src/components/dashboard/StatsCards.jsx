@@ -9,11 +9,18 @@ import {
   ArrowDownRight
 } from "lucide-react";
 
+// Helper function to safely render values
+const safeRender = (value, fallback = 0) => {
+  if (value === null || value === undefined) return fallback;
+  if (typeof value === 'object') return fallback;
+  return value;
+};
+
 const StatsCards = ({ dashboardData }) => {
   const stats = [
     {
       title: "Total Revenue (Year)",
-      value: `$${dashboardData?.earnings?.totalYear?.toLocaleString() || 0}`,
+      value: `$${safeRender(dashboardData?.earnings?.totalYear)?.toLocaleString() || 0}`,
       change: "+20.1%",
       trend: "up",
       icon: DollarSign,
@@ -22,7 +29,7 @@ const StatsCards = ({ dashboardData }) => {
     },
     {
       title: "Monthly Revenue",
-      value: `$${dashboardData?.earnings?.totalMonth?.toLocaleString() || 0}`,
+      value: `$${safeRender(dashboardData?.earnings?.totalMonth)?.toLocaleString() || 0}`,
       change: "+15.3%",
       trend: "up",
       icon: TrendingUp,
@@ -31,7 +38,7 @@ const StatsCards = ({ dashboardData }) => {
     },
     {
       title: "Weekly Revenue",
-      value: `$${dashboardData?.earnings?.totalWeek?.toLocaleString() || 0}`,
+      value: `$${safeRender(dashboardData?.earnings?.totalWeek)?.toLocaleString() || 0}`,
       change: "+8.7%",
       trend: "up",
       icon: Activity,
@@ -40,7 +47,7 @@ const StatsCards = ({ dashboardData }) => {
     },
     {
       title: "Today's Revenue",
-      value: `$${dashboardData?.earnings?.totalToday?.toLocaleString() || 0}`,
+      value: `$${safeRender(dashboardData?.earnings?.totalToday)?.toLocaleString() || 0}`,
       change: "+2.1%",
       trend: "up",
       icon: ShoppingCart,

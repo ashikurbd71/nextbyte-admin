@@ -2,6 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 
+// Helper function to safely render values
+const safeRender = (value, fallback = 0) => {
+    if (value === null || value === undefined) return fallback;
+    if (typeof value === 'object') return fallback;
+    return value;
+};
+
 const PerformanceOverview = ({ dashboardData }) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -22,11 +29,11 @@ const PerformanceOverview = ({ dashboardData }) => {
                                     Total Courses
                                 </p>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    {dashboardData?.courses?.total || dashboardData?.courses || 0} courses
+                                    {safeRender(dashboardData?.courses?.total)} courses
                                 </p>
                             </div>
                             <p className="text-sm font-medium text-slate-900 dark:text-white">
-                                {dashboardData?.courses?.total || dashboardData?.courses || 0}
+                                {safeRender(dashboardData?.courses?.total)}
                             </p>
                         </div>
                         <div className="flex items-center justify-between">
@@ -35,11 +42,11 @@ const PerformanceOverview = ({ dashboardData }) => {
                                     Active Courses
                                 </p>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    {dashboardData?.courses?.totalActive || dashboardData?.courses?.active || 0} active
+                                    {safeRender(dashboardData?.courses?.totalActive)} active
                                 </p>
                             </div>
                             <p className="text-sm font-medium text-slate-900 dark:text-white">
-                                {dashboardData?.courses?.totalActive || dashboardData?.courses?.active || 0}
+                                {safeRender(dashboardData?.courses?.totalActive)}
                             </p>
                         </div>
                         <div className="flex items-center justify-between">
@@ -48,11 +55,11 @@ const PerformanceOverview = ({ dashboardData }) => {
                                     Average Rating
                                 </p>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    {dashboardData?.courses?.averageRating || dashboardData?.courses?.rating || 0} stars
+                                    {safeRender(dashboardData?.courses?.averageRating)} stars
                                 </p>
                             </div>
                             <p className="text-sm font-medium text-slate-900 dark:text-white">
-                                {dashboardData?.courses?.averageRating || dashboardData?.courses?.rating || 0}/5
+                                {safeRender(dashboardData?.courses?.averageRating)}/5
                             </p>
                         </div>
                         <div className="flex items-center justify-between">
@@ -61,11 +68,11 @@ const PerformanceOverview = ({ dashboardData }) => {
                                     Total Certificates
                                 </p>
                                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    {dashboardData?.courses?.totalCertificates || dashboardData?.courses?.certificates || 0} issued
+                                    {safeRender(dashboardData?.courses?.totalCertificates)} issued
                                 </p>
                             </div>
                             <p className="text-sm font-medium text-slate-900 dark:text-white">
-                                {dashboardData?.courses?.totalCertificates || dashboardData?.courses?.certificates || 0}
+                                {safeRender(dashboardData?.courses?.totalCertificates)}
                             </p>
                         </div>
                     </div>
@@ -91,7 +98,7 @@ const PerformanceOverview = ({ dashboardData }) => {
                                 </p>
                             </div>
                             <p className="text-sm font-medium text-slate-900 dark:text-white">
-                                {dashboardData?.enrollments?.statusStats?.active || dashboardData?.enrollments?.active || 0}
+                                {safeRender(dashboardData?.enrollments?.statusStats?.active)}
                             </p>
                         </div>
                         <div className="flex items-center justify-between">
@@ -102,7 +109,7 @@ const PerformanceOverview = ({ dashboardData }) => {
                                 </p>
                             </div>
                             <p className="text-sm font-medium text-slate-900 dark:text-white">
-                                {dashboardData?.enrollments?.statusStats?.pending || dashboardData?.enrollments?.pending || 0}
+                                {safeRender(dashboardData?.enrollments?.statusStats?.pending)}
                             </p>
                         </div>
                         <div className="flex items-center justify-between">
@@ -113,7 +120,7 @@ const PerformanceOverview = ({ dashboardData }) => {
                                 </p>
                             </div>
                             <p className="text-sm font-medium text-slate-900 dark:text-white">
-                                {dashboardData?.enrollments?.statusStats?.completed || dashboardData?.enrollments?.completed || 0}
+                                {safeRender(dashboardData?.enrollments?.statusStats?.completed)}
                             </p>
                         </div>
                         <div className="flex items-center justify-between">
@@ -124,7 +131,7 @@ const PerformanceOverview = ({ dashboardData }) => {
                                 </p>
                             </div>
                             <p className="text-sm font-medium text-slate-900 dark:text-white">
-                                {dashboardData?.enrollments?.statusStats?.cancelled || dashboardData?.enrollments?.cancelled || 0}
+                                {safeRender(dashboardData?.enrollments?.statusStats?.cancelled)}
                             </p>
                         </div>
                     </div>

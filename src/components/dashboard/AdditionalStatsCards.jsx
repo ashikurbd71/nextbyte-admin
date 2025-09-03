@@ -7,6 +7,13 @@ import {
   ArrowDownRight
 } from "lucide-react";
 
+// Helper function to safely render values
+const safeRender = (value, fallback = 0) => {
+  if (value === null || value === undefined) return fallback;
+  if (typeof value === 'object') return fallback;
+  return value;
+};
+
 const AdditionalStatsCards = ({ dashboardData }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -21,7 +28,7 @@ const AdditionalStatsCards = ({ dashboardData }) => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-slate-900 dark:text-white">
-            {dashboardData?.users?.total?.toLocaleString() || dashboardData?.users?.toLocaleString() || 0}
+            {safeRender(dashboardData?.users?.total)?.toLocaleString() || 0}
           </div>
           <div className="flex items-center space-x-1 text-xs">
             <ArrowUpRight className="h-3 w-3 text-green-600" />
@@ -42,7 +49,7 @@ const AdditionalStatsCards = ({ dashboardData }) => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-slate-900 dark:text-white">
-            {dashboardData?.courses?.total?.toLocaleString() || dashboardData?.courses?.toLocaleString() || 0}
+            {safeRender(dashboardData?.courses?.total)?.toLocaleString() || 0}
           </div>
           <div className="flex items-center space-x-1 text-xs">
             <ArrowUpRight className="h-3 w-3 text-green-600" />
@@ -63,7 +70,7 @@ const AdditionalStatsCards = ({ dashboardData }) => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-slate-900 dark:text-white">
-            {dashboardData?.enrollments?.totalPending?.toLocaleString() || dashboardData?.enrollments?.pending?.toLocaleString() || 0}
+            {safeRender(dashboardData?.enrollments?.totalPending)?.toLocaleString() || 0}
           </div>
           <div className="flex items-center space-x-1 text-xs">
             <ArrowDownRight className="h-3 w-3 text-red-600" />
@@ -84,7 +91,7 @@ const AdditionalStatsCards = ({ dashboardData }) => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-slate-900 dark:text-white">
-            {dashboardData?.enrollments?.statusStats?.active || dashboardData?.enrollments?.active || 0}
+            {safeRender(dashboardData?.enrollments?.statusStats?.active)}
           </div>
           <div className="flex items-center space-x-1 text-xs">
             <ArrowUpRight className="h-3 w-3 text-green-600" />
