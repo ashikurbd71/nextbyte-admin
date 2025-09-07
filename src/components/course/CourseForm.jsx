@@ -44,6 +44,9 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
         level: "beginner",
         isPublished: false,
         isPublic: false,
+        facebookGroupLink: "",
+        totalModules: 0,
+        isFeatured: false,
     });
 
     useEffect(() => {
@@ -95,6 +98,9 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
                 level: course.level || "beginner",
                 isPublished: course.isPublished || false,
                 isPublic: course.isPublic || false,
+                facebookGroupLink: course.facebookGroupLink || "",
+                totalModules: course.totalModules || 0,
+                isFeatured: course.isFeatured || false,
             });
         }
     }, [course]);
@@ -185,8 +191,9 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
             price: formData.price ? parseFloat(formData.price) : 0,
             discountPrice: formData.discountPrice ? parseFloat(formData.discountPrice) : 0,
             totalSeat: formData.totalSeat ? parseInt(formData.totalSeat) : 0,
+            totalModules: formData.totalModules ? parseInt(formData.totalModules) : 0,
             categoryId: formData.categoryId ? parseInt(formData.categoryId) : null,
-            instructorIds: formData.instructorIds || [],
+            instructorIds: formData.instructorIds ? formData.instructorIds.map(id => id).filter(id => id && id > 0) : [],
         };
 
         console.log('Clean data for submission:', cleanData);
@@ -220,6 +227,20 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
         console.log('Available instructor IDs:', instructors.map(instructor => instructor.id.toString()));
 
         if (!instructorIds || instructorIds.length === 0) return { isValid: true, message: "" };
+
+        // Check if all IDs are valid positive numbers
+        const invalidNumberIds = instructorIds.filter(id => {
+            const numId = parseInt(id);
+            return isNaN(numId) || numId <= 0;
+        });
+
+        if (invalidNumberIds.length > 0) {
+            console.log('Invalid number instructor IDs found:', invalidNumberIds);
+            return {
+                isValid: false,
+                message: `Instructor IDs must be positive numbers: ${invalidNumberIds.join(', ')}`
+            };
+        }
 
         const availableIds = instructors.map(instructor => instructor.id.toString());
         const invalidIds = instructorIds.filter(id => !availableIds.includes(id.toString()));
@@ -391,6 +412,30 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
                                         value={formData.totalSeat}
                                         onChange={(e) => handleInputChange("totalSeat", e.target.value)}
                                         placeholder="e.g., 100"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="totalModules">Total Modules</Label>
+                                    <Input
+                                        id="totalModules"
+                                        type="number"
+                                        min="0"
+                                        value={formData.totalModules}
+                                        onChange={(e) => handleInputChange("totalModules", e.target.value)}
+                                        placeholder="e.g., 10"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="facebookGroupLink">Facebook Group Link</Label>
+                                    <Input
+                                        id="facebookGroupLink"
+                                        type="url"
+                                        value={formData.facebookGroupLink}
+                                        onChange={(e) => handleInputChange("facebookGroupLink", e.target.value)}
+                                        placeholder="https://facebook.com/groups/your-group"
                                     />
                                 </div>
                             </div>
@@ -765,8 +810,17 @@ const CourseForm = ({ course, onSubmit, onClose, isLoading = false }) => {
                                     </span>
                                 </div>
 
-
-
+                                <div className="flex items-center space-x-2">
+                                    <Switch
+                                        id="isFeatured"
+                                        checked={formData.isFeatured}
+                                        onCheckedChange={(checked) => handleInputChange("isFeatured", checked)}
+                                    />
+                                    <Label htmlFor="isFeatured">Feature this course</Label>
+                                    <span className="text-xs text-slate-400 ml-2">
+                                        (Current: {formData.isFeatured ? 'true' : 'false'})
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
