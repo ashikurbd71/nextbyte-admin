@@ -117,6 +117,19 @@ const ProfileInformation = ({
                         {errors.experience && <p className="text-sm text-red-500">{errors.experience}</p>}
                     </div>
 
+                    <div className="space-y-2">
+                        <Label htmlFor="phone">Phone Number *</Label>
+                        <Input
+                            id="phone"
+                            type="tel"
+                            value={profileData.phone}
+                            onChange={(e) => handleProfileChange("phone", e.target.value)}
+                            placeholder="Enter phone number (e.g., +1234567890)"
+                            className={errors.phone ? "border-red-500" : ""}
+                        />
+                        {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
+                    </div>
+
 
 
 

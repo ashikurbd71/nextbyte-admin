@@ -41,6 +41,7 @@ const InstructorRegistrationForm = ({ isOpen, onClose, onSuccess }) => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
+        phone: "",
         bio: "",
         designation: "",
         experience: "",
@@ -107,6 +108,9 @@ const InstructorRegistrationForm = ({ isOpen, onClose, onSuccess }) => {
         if (!formData.email.trim()) newErrors.email = "Email is required";
         else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid";
 
+        if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
+
+
         if (!formData.password) newErrors.password = "Password is required";
         else if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
 
@@ -156,6 +160,7 @@ const InstructorRegistrationForm = ({ isOpen, onClose, onSuccess }) => {
         setFormData({
             name: "",
             email: "",
+            phone: "",
             bio: "",
             designation: "",
             experience: "",
@@ -216,6 +221,19 @@ const InstructorRegistrationForm = ({ isOpen, onClose, onSuccess }) => {
                                         className={errors.email ? "border-red-500" : ""}
                                     />
                                     {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="phone">Phone Number *</Label>
+                                    <Input
+                                        id="phone"
+                                        type="tel"
+                                        value={formData.phone}
+                                        onChange={(e) => handleInputChange("phone", e.target.value)}
+                                        placeholder="Enter phone number (e.g., +1234567890)"
+                                        className={errors.phone ? "border-red-500" : ""}
+                                    />
+                                    {errors.phone && <p className="text-sm text-red-500">{errors.phone}</p>}
                                 </div>
 
                                 <div className="space-y-2">
