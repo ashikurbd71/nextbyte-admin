@@ -15,10 +15,6 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      external: (id) => {
-        // Don't externalize these libraries - let Vite bundle them
-        return false;
-      },
       output: {
         manualChunks: {
           // Create separate chunks for PDF libraries
