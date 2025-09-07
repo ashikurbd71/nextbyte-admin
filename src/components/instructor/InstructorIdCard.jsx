@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Download, CreditCard } from "lucide-react";
-import colorLogo from "@/assets/icons/colorlogo.png";
+import colorLogo from "@/assets/icons/whitelogo.png";
 
 const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
@@ -26,13 +26,40 @@ const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
                 throw new Error("ID card element not found");
             }
 
+            // Small delay to ensure all elements are rendered
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            // Log element dimensions for debugging
+            console.log('Card element dimensions:', {
+                offsetWidth: cardElement.offsetWidth,
+                offsetHeight: cardElement.offsetHeight,
+                scrollWidth: cardElement.scrollWidth,
+                scrollHeight: cardElement.scrollHeight
+            });
+
             // Capture the component as canvas
             const canvas = await html2canvas(cardElement, {
                 scale: 2, // Higher quality
                 useCORS: true, // Handle cross-origin images
                 allowTaint: true,
                 backgroundColor: '#ffffff',
-                logging: false
+                logging: true, // Enable logging to debug
+                height: cardElement.offsetHeight,
+                width: cardElement.offsetWidth,
+                scrollX: 0,
+                scrollY: 0,
+                windowWidth: cardElement.offsetWidth,
+                windowHeight: cardElement.offsetHeight,
+                ignoreElements: (element) => {
+                    // Don't ignore any elements, capture everything
+                    return false;
+                }
+            });
+
+            // Log canvas dimensions for debugging
+            console.log('Canvas dimensions:', {
+                width: canvas.width,
+                height: canvas.height
             });
 
             // Create PDF
@@ -46,6 +73,8 @@ const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
             // Calculate dimensions to fit the card
             const imgWidth = 85;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            console.log('PDF image dimensions:', { imgWidth, imgHeight });
 
             // Add image to PDF
             pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
@@ -83,7 +112,7 @@ const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
 
                 <div className="p-4">
                     {/* Clean Modern ID Card Design */}
-                    <div className="relative w-[300px] h-[470px] bg-white rounded-lg shadow-2xl overflow-hidden id-card-container">
+                    <div className="relative w-[300px] h-[450px] bg-white rounded-lg shadow-2xl overflow-hidden id-card-container">
                         {/* Wave-like Header */}
                         <div className="relative h-20 bg-primary overflow-hidden">
                             {/* Company Logo */}
@@ -125,7 +154,7 @@ const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
                         </div>
 
                         {/* Main Content */}
-                        <div className="pt-24 px-6 pb-4">
+                        <div className="pt-20 px-6  flex-1">
                             {/* Name Section */}
                             <div className="text-center mb-4">
                                 <div className="text-2xl font-bold">
@@ -138,7 +167,7 @@ const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
                             </div>
 
                             {/* Personal Details */}
-                            <div className="space-y-2 pt-8 text-sm">
+                            <div className="space-y-2 pt-5 text-sm">
                                 <div className="flex justify-between">
                                     <span className="text-secondary font-medium">ID No:</span>
                                     <span className="text-secondary">{instructor.id || '###'}</span>
@@ -155,11 +184,11 @@ const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
                         </div>
 
                         {/* Bottom Footer */}
-                        <div className="absolute bottom-0 left-0 w-full h-8 bg-secondary flex items-center justify-center">
+                        <div className=" mt-12 left-0 w-full h-12 bg-secondary flex items-center justify-center rounded-b-lg">
                             <img
                                 src={colorLogo}
                                 alt="Company Logo"
-                                className="h-4 w-auto object-contain brightness-0 invert opacity-80"
+                                className="h-6 w-auto object-contain brightness-0 invert opacity-80"
                             />
                         </div>
                     </div>
