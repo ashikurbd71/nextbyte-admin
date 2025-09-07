@@ -6,7 +6,7 @@
 const CDN_BASE_URL = "https://cdn.nextbyteitinstitute.com"
 console.log(CDN_BASE_URL)
 /**
- * Upload a file to the CDN server
+
  * @param {File} file - The file to upload
  * @param {string} folder - Optional folder name (default: 'documents')
  * @returns {Promise<string>} - The CDN URL of the uploaded file
