@@ -82,7 +82,7 @@ const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
 
                 <div className="p-4">
                     {/* Clean Modern ID Card Design */}
-                    <div className="relative w-[300px] h-[450px] bg-white rounded-lg shadow-2xl overflow-hidden id-card-container">
+                    <div className="relative w-[300px] h-[470px] bg-white rounded-lg shadow-2xl overflow-hidden id-card-container">
                         {/* Wave-like Header */}
                         <div className="relative h-20 bg-primary overflow-hidden">
                             {/* Wave curve effect */}
