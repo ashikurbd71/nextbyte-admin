@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Download, CreditCard } from "lucide-react";
+import colorLogo from "@/assets/icons/colorlogo.png";
 
 const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
@@ -85,6 +86,14 @@ const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
                     <div className="relative w-[300px] h-[470px] bg-white rounded-lg shadow-2xl overflow-hidden id-card-container">
                         {/* Wave-like Header */}
                         <div className="relative h-20 bg-primary overflow-hidden">
+                            {/* Company Logo */}
+                            <div className="absolute top-2 left-2 z-20">
+                                <img
+                                    src={colorLogo}
+                                    alt="Company Logo"
+                                    className="h-8 w-auto object-contain brightness-0 invert"
+                                />
+                            </div>
                             {/* Wave curve effect */}
                             <div className="absolute bottom-0 left-0 w-full h-8 bg-primary">
                                 <svg className="absolute bottom-0 w-full h-8" viewBox="0 0 320 32" preserveAspectRatio="none">
@@ -146,7 +155,13 @@ const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
                         </div>
 
                         {/* Bottom Footer */}
-                        <div className="absolute bottom-0 left-0 w-full h-8 bg-secondary"></div>
+                        <div className="absolute bottom-0 left-0 w-full h-8 bg-secondary flex items-center justify-center">
+                            <img
+                                src={colorLogo}
+                                alt="Company Logo"
+                                className="h-4 w-auto object-contain brightness-0 invert opacity-80"
+                            />
+                        </div>
                     </div>
                 </div>
 
