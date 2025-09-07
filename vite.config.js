@@ -13,6 +13,26 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      external: (id) => {
+        // Don't externalize these libraries - let Vite bundle them
+        return false;
+      },
+      output: {
+        manualChunks: {
+          // Create separate chunks for PDF libraries
+          'pdf-libs': ['jspdf', 'jspdf-autotable', 'html2canvas']
+        }
+      }
+    },
+    commonjsOptions: {
+      include: [/node_modules/]
+    }
+  },
+  optimizeDeps: {
+    include: ['jspdf', 'jspdf-autotable', 'html2canvas']
+  },
   server: {
     proxy: {
       "/api": {

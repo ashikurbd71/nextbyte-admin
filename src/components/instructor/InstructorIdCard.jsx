@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Download, CreditCard } from "lucide-react";
 import colorLogo from "@/assets/icons/whitelogo.png";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 
 const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
     const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
@@ -13,12 +15,6 @@ const InstructorIdCard = ({ instructor, isOpen, onClose }) => {
     const generateIdCardPDF = async () => {
         try {
             setIsGeneratingPDF(true);
-
-            // Import required libraries
-            const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
-                import('html2canvas'),
-                import('jspdf')
-            ]);
 
             // Get the ID card element
             const cardElement = document.querySelector('.id-card-container');

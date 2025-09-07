@@ -21,6 +21,8 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import Loader from "@/components/loader/Loader";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 
 // API hooks
 import { useGetEnrollmentByIdQuery } from "@/features/enrollment-apis/enrollmentApis";
@@ -128,10 +130,6 @@ const EnrollmentDetailsPage = () => {
         try {
             setIsGeneratingPDF(true);
 
-            // Dynamic import for jsPDF
-            const { jsPDF } = await import('jspdf');
-            const autoTable = await import('jspdf-autotable');
-
             const doc = new jsPDF({
                 orientation: "portrait",
                 unit: "mm",
@@ -181,7 +179,7 @@ const EnrollmentDetailsPage = () => {
                 ["Status", enrollment.student?.isActive ? "Active" : "Inactive"]
             ];
 
-            autoTable.default(doc, {
+            doc.autoTable({
                 startY: yPosition,
                 head: [["Field", "Value"]],
                 body: studentInfo,
@@ -228,7 +226,7 @@ const EnrollmentDetailsPage = () => {
                 ["Status", enrollment.course?.isActive ? "Active" : "Inactive"]
             ];
 
-            autoTable.default(doc, {
+            doc.autoTable({
                 startY: yPosition,
                 head: [["Field", "Value"]],
                 body: courseInfo,
@@ -276,7 +274,7 @@ const EnrollmentDetailsPage = () => {
                 ["Completed At", formatDate(enrollment.completedAt)]
             ];
 
-            autoTable.default(doc, {
+            doc.autoTable({
                 startY: yPosition,
                 head: [["Field", "Value"]],
                 body: paymentInfo,
