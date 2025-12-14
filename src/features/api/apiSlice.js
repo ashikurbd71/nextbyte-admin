@@ -5,7 +5,7 @@ import {
 } from "@/features/adminauth/adminAuthSlice";
 import { getTokens } from "@/hooks/useToken";
 
-const BASE_URL = 'https://api.nextbyteitinstitute.com/';
+const BASE_URL = 'https://server.private.nextbyteitinstitute.com';
 
 // base fetch query
 const baseQuery = fetchBaseQuery({
