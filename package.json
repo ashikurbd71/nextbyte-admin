@@ -8,7 +8,12 @@
     "build": "vite build",
     "build:prod": "vite build --mode prod",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+     "docker:buildx": "docker buildx build --platform linux/amd64 --push --compress -t codehub.farhansadiq.dev/next-byte-institute/nextbyte-admin:latest .",
+    "docker:buildx:force": "docker buildx build --platform linux/amd64 --push --no-cache --pull --compress -t codehub.farhansadiq.dev/next-byte-institute/nextbyte-admin:latest .",
+    "build:docker": "npm run docker:buildx",
+    "build:docker:force": "npm run docker:buildx:force"
+  
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  nextbyte-admin:
+    image: codehub.farhansadiq.dev/next-byte-institute/nextbyte-admin:latest
+    env_file:
+      - .env
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+        order: start-first
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+        reservations:
+          cpus: "0.125"
+          memory: 128M
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.nextbyte-admin.rule=Host(`admin.nextbyteitinstitute.com`)"
+        - "traefik.http.routers.nextbyte-admin.priority=5"
+        - "traefik.http.routers.nextbyte-admin.entrypoints=websecure"
+        - "traefik.http.routers.nextbyte-admin.tls.certresolver=leresolver"
+        - "traefik.http.routers.nextbyte-admin.tls=true"
+        - "traefik.http.routers.nextbyte-admin.service=nextbyte-admin"
+        - "traefik.http.services.nextbyte-admin.loadbalancer.server.port=5173"
+        - "traefik.swarm.network=traefik_proxy"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
+    name: traefik_proxy
